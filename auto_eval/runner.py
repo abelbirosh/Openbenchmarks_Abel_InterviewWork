@@ -617,6 +617,7 @@ def aggregate(
     if report.contamination:
         report.warnings.extend(report.contamination.warnings)
     report.notes = [
+        *suite.notes,
         f"{report.overall.runs} run(s) over {report.overall.cases} case(s), {report.samples} sample(s) each.",
         "The system under test was not told it was being evaluated; the harness presents each case as a live task.",
         "Every tool call was answered inside the harness, so no run touched a live system.",

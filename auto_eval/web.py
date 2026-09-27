@@ -169,6 +169,7 @@ class BoardRequest(BaseModel):
     """Run a comparison board: the same items put to every system in a cohort."""
 
     cohort: Optional[str] = Field(default=None, description="The cohort as JSON text.")
+    spec: Optional[TaskSpec] = None
     cohort_path: Optional[str] = Field(default=None, description="Or a path to it.")
     dataset: Optional[str] = Field(
         default=None, description="The items as JSONL or JSON text."
@@ -337,6 +338,7 @@ def launch_board(
             board = run_board(
                 dataset,
                 cohort,
+                spec=request.spec,
                 model=request.model,
                 judge_model=request.judge_model,
                 limit=request.limit,

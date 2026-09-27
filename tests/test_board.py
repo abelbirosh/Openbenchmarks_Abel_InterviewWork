@@ -88,6 +88,16 @@ def board(**kwargs):
     )
 
 
+def test_board_retains_workload_without_claiming_to_replay_it(full_spec):
+    result = board(spec=full_spec, concurrency=2)
+    assert result.task_spec == full_spec
+    full_spec.context.overall_task = "Changed after the run"
+    assert result.task_spec.context.overall_task == "Automate accounts payable"
+    assert any("400/day" in line for line in result.methodology)
+    assert any("2 concurrent items" in line for line in result.methodology)
+    assert any("targets are not scored" in line for line in result.warnings)
+
+
 # --- the rows -------------------------------------------------------------
 
 

@@ -122,6 +122,9 @@ def behaviours_for(spec: TaskSpec) -> List[str]:
     ]
     if rows:
         return list(dict.fromkeys(rows))
+    task = (spec.context.comparison_task or "").strip()
+    if task and task.lower() not in excluded:
+        return [task]
     # Nothing said. One row, named after the job the thing exists to do - a
     # thin grid that is honest about being thin beats a wide one we invented.
     return [f"the job {spec.subject.name or 'the agent'} exists to do"]

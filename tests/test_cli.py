@@ -11,6 +11,8 @@ def test_schema_command_emits_valid_json_schema(capsys):
     assert "subject" in schema["properties"]
     assert "kpis" in schema["properties"]
     assert "evidence" in schema["properties"]
+    assert "context" in schema["properties"]
+    assert "workload" in schema["properties"]
 
 
 def test_schema_command_writes_to_file(tmp_path, capsys):

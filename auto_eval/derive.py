@@ -27,6 +27,7 @@ from .schema import (
     SubjectKind,
     TaskSpec,
 )
+from .workload import target_kpis
 
 
 def _kpi(
@@ -196,6 +197,24 @@ def derive(spec: TaskSpec) -> TaskSpec:
     assumptions = list(spec.assumptions)
     kpis = [kpi.model_copy(deep=True) for kpi in spec.kpis]
     eval_types = list(spec.eval_types)
+
+    # Explicit workload targets are acceptance criteria. Expected traffic and
+    # observed measurements are context, never automatic pass thresholds.
+    for target in target_kpis(spec):
+        existing = next(
+            (
+                k
+                for k in kpis
+                if k.name.strip().casefold() == target.name.strip().casefold()
+            ),
+            None,
+        )
+        if existing is None:
+            kpis.append(target)
+        elif existing.target is None:
+            existing.target = target.target
+            if existing.measurement is Measurement.UNKNOWN:
+                existing.measurement = Measurement.TELEMETRY
 
     if not kpis:
         proposed = default_kpi(spec)

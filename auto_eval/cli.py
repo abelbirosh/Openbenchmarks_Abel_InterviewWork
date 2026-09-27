@@ -488,6 +488,7 @@ def _cmd_board(args: argparse.Namespace) -> int:
     board = run_board(
         dataset,
         cohort,
+        spec=_load_spec(args) if args.spec else None,
         model=args.model,
         judge_model=args.judge_model,
         limit=args.limit,
@@ -965,6 +966,11 @@ def build_parser() -> argparse.ArgumentParser:
     )
     board_cmd.add_argument(
         "dataset", help="A .jsonl or .json file of items with gold answers."
+    )
+    board_cmd.add_argument(
+        "-s",
+        "--spec",
+        help="Task spec JSON with the user's goal and workload requirements.",
     )
     board_cmd.add_argument(
         "-c",

@@ -524,7 +524,7 @@ def _finished(client, job, tries=200):
 
 
 @pytest.fixture
-def board_run(client, tmp_path, monkeypatch):
+def board_run(client, tmp_path, monkeypatch, full_spec):
     """A board over one item, with both the model and the vendor stubbed."""
     from auto_eval import board as board_module
 
@@ -570,6 +570,7 @@ def board_run(client, tmp_path, monkeypatch):
         json={
             "cohort": BOARD_COHORT,
             "dataset": BOARD_ITEMS,
+            "spec": full_spec.model_dump(mode="json"),
             "dataset_name": "news",
             "out": str(tmp_path / "boards"),
         },
@@ -594,6 +595,8 @@ def test_a_board_reads_back_with_its_rows_and_its_baseline(client, board_run, tm
     assert "Alpha" in labels and any("model only" in label for label in labels)
     alpha = next(row for row in body["rows"] if row["label"] == "Alpha")
     assert alpha["accuracy"] == 1.0 and alpha["recall_at_1"] == 1.0
+    assert body["task_spec"]["context"]["overall_task"] == "Automate accounts payable"
+    assert body["task_spec"]["workload"]["metrics"][0]["value"] == "400/day"
 
 
 def test_boards_are_listed_with_what_they_found(client, board_run, tmp_path):

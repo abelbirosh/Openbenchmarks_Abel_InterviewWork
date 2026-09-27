@@ -1,0 +1,33 @@
+{
+  "title": "News search API comparison",
+  "summary": "Choose a news search API for the app's real queries, freshness requirements, cost and latency.",
+  "subject": {
+    "name": "News search APIs",
+    "kind": "api_endpoint",
+    "description": "Return recent news articles matching a topic or named entity.",
+    "inputs": "Topic or entity query",
+    "outputs": "Up to 10 articles with title, URL and publication time",
+    "in_scope": ["Topic searches", "Named-entity searches"]
+  },
+  "context": {
+    "overall_task": "Make a news web app",
+    "comparison_task": "Choose a web API with low costs and latency",
+    "preferences": ["Prefer lower cost when freshness and latency requirements are met"],
+    "details": ["Small team; simple integration matters"]
+  },
+  "workload": {
+    "description": "Interactive news lookup for a reader-facing app",
+    "representative_inputs": ["Latest California housing news", "Recent announcements from NASA"],
+    "data_characteristics": ["English articles", "Published in the last 24 hours", "Up to 10 results per request"],
+    "request_mix": ["80% topic searches", "20% named-entity searches"],
+    "metrics": [
+      {"name": "Daily requests", "kind": "volume", "value": "about 10k requests/day", "role": "expected"},
+      {"name": "Peak traffic", "kind": "throughput", "value": "roughly 20 requests/second", "role": "expected"},
+      {"name": "p95 latency", "kind": "latency", "value": "under 500 ms", "role": "target"},
+      {"name": "Monthly spend", "kind": "cost", "value": "under $100/month", "role": "target"}
+    ],
+    "notes": ["Illustrative workload figures, not production measurements"]
+  },
+  "eval_types": ["comparative", "performance", "cost"],
+  "constraints": ["Results must include publication timestamps"]
+}

@@ -46,7 +46,9 @@ from .dataset import Dataset, Item
 from .endpoint import Hit, Response, call
 from .fetch import check_url
 from .judge import judge_reply
+from .schema import TaskSpec
 from .score import Summary, Verdict, percentile, score_hits, score_reply, summarise
+from .workload import EXECUTION_LIMIT, brief
 
 # Items in flight per system. Vendors rate-limit; this is deliberately modest.
 DEFAULT_CONCURRENCY = 4
@@ -163,6 +165,7 @@ class Board(BaseModel):
 
     board_id: str
     task: str = ""
+    task_spec: Optional[TaskSpec] = None
     started_at: str
     finished_at: str = ""
     seconds: float = 0.0
@@ -609,6 +612,7 @@ def run_board(
     baseline: bool = True,
     progress: Optional[Progress] = None,
     settings: Optional[Settings] = None,
+    spec: Optional[TaskSpec] = None,
 ) -> Board:
     """Run every system in `cohort` over `dataset`, and build the board."""
     items = dataset.sample(limit)
@@ -638,6 +642,7 @@ def run_board(
     board = Board(
         board_id=f"{cohort.name or 'board'}-{started.strftime('%Y%m%d-%H%M%S')}",
         task=cohort.task or dataset.task,
+        task_spec=spec.model_copy(deep=True) if spec else None,
         started_at=started.isoformat(timespec="seconds"),
         dataset=dataset.name,
         dataset_digest=dataset.digest,
@@ -670,7 +675,19 @@ def run_board(
         dataset.model_copy(update={"items": items}), held_model, cutoff=cutoff
     )
     board.methodology = _methodology(board, cohort, dataset)
+    if spec:
+        board.methodology.extend(brief(spec))
+        board.methodology.append(
+            f"Actual board execution: at most {max(1, concurrency)} concurrent items per system; {len(items)} dataset items."
+        )
     board.warnings = [*_warnings(board, dataset), *board.contamination.warnings]
+    if spec:
+        board.warnings.extend(
+            [
+                EXECUTION_LIMIT,
+                "Dataset fit to the stated workload and request mix has not been verified automatically; workload targets are not scored by this board.",
+            ]
+        )
     return board
 
 

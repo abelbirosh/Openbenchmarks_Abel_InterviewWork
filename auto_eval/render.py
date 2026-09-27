@@ -16,6 +16,7 @@ from .schema import EvidenceStatus, Readiness, TaskSpec
 from .suite import Split, Suite, kpi_coverage
 from .surface import CellStatus, CoverageMatrix
 from .verify import automatic_share
+from .workload import brief
 
 READINESS_BLURB = {
     Readiness.READY: "enough detail to start building the eval",
@@ -97,6 +98,12 @@ def render_markdown(spec: TaskSpec) -> str:
         f"**Open questions:** {len(spec.open_questions)} ({blocking} blocking)",
         "",
         spec.summary,
+        "",
+        "## User task and workload",
+        "",
+        *_bullets(
+            brief(spec), "not stated — the benchmark is not yet tailored to a workload"
+        ),
         "",
         "## 1. What we're testing",
         "",

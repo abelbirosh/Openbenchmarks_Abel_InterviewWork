@@ -41,6 +41,7 @@ from .schema import (
 )
 from .surface import CoverageMatrix
 from .verify import Reads, Verifier, VerifierKind, guardrails, verifiers_for_kpi
+from .workload import brief, target_kpis
 
 
 class CaseSource(str, Enum):
@@ -180,7 +181,20 @@ def _kpi_verifiers(
     """
     out: List[Verifier] = []
     outcome_case = bool(set(eval_types) & OUTCOME_TYPES)
+    workload_targets = {k.name.strip().casefold(): k for k in target_kpis(spec)}
     for kpi in spec.kpis:
+        if kpi.name.strip().casefold() in workload_targets:
+            out.append(
+                Verifier(
+                    id=f"{prefix}workload.{hashlib.sha256(kpi.name.encode()).hexdigest()[:12]}",
+                    kind=VerifierKind.WORKLOAD_TARGET,
+                    reads=Reads.TRACE,
+                    description=f"Measure {kpi.name} under the stated workload.",
+                    kpi=kpi.name,
+                    expect=kpi.target,
+                )
+            )
+            continue
         if kpi.measurement is Measurement.TELEMETRY or outcome_case:
             out.extend(verifiers_for_kpi(kpi, agent_profile, prefix=prefix))
     return out
@@ -283,6 +297,22 @@ def _build(
         *_kpi_verifiers(spec, agent_profile, eval_types, prefix=f"{case_id}."),
         *(extra(case_id) if extra else []),
     ]
+    if source is CaseSource.SYNTHESISED:
+        # Actual case input stays separate from reference examples. Do not
+        # rewrite harvested traces or public benchmark tasks.
+        context = brief(
+            spec.model_copy(
+                update={
+                    "workload": spec.workload.model_copy(
+                        update={"representative_inputs": []}
+                    )
+                }
+            )
+        )
+        if context:
+            instruction = (
+                "Task context:\n" + "\n".join(context) + "\n\nRequest:\n" + instruction
+            )
     return Case(
         id=case_id,
         family=family,
@@ -968,6 +998,31 @@ def author(
         *harvested(spec, agent_profile, behaviours),
         *adapted(spec, agent_profile, behaviours),
     ]
+
+    # User-supplied inputs become concrete capability cases. No output was
+    # supplied, so these are still authored cases, not golden successful runs.
+    if any(c.eval_type is EvalType.CAPABILITY for c in matrix.cells):
+        for example in dict.fromkeys(spec.workload.representative_inputs):
+            if not example.strip():
+                continue
+            behaviour = nearest_behaviour(example, behaviours)
+            cases.append(
+                _build(
+                    spec=spec,
+                    agent_profile=agent_profile,
+                    behaviour=behaviour,
+                    family="capability.workload_input",
+                    variant=example,
+                    eval_types=[EvalType.CAPABILITY],
+                    instruction=example,
+                    fixture=_workspace(
+                        f"The stated workload environment for {behaviour}."
+                    ),
+                    source=CaseSource.SYNTHESISED,
+                    requires=[t.name for t in _tools_for(behaviour, agent_profile)],
+                    notes=["Input supplied by the user; no gold answer was inferred."],
+                )
+            )
 
     counted: Dict[tuple, int] = {}
     for case in cases:

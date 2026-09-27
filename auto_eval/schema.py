@@ -202,12 +202,73 @@ class Readiness(str, Enum):
     INSUFFICIENT = "insufficient"  # blocking holes; do not proceed
 
 
+class TaskContext(BaseModel):
+    """The product goal and the narrower decision this benchmark supports."""
+
+    overall_task: Optional[str] = None
+    comparison_task: Optional[str] = None
+    preferences: List[str] = Field(
+        default_factory=list,
+        description="Soft preferences and tradeoffs, in the user's words.",
+    )
+    details: List[str] = Field(default_factory=list)
+
+
+class WorkloadMetricKind(str, Enum):
+    VOLUME = "volume"
+    LATENCY = "latency"
+    COST = "cost"
+    THROUGHPUT = "throughput"
+    CONCURRENCY = "concurrency"
+    INPUT_SIZE = "input_size"
+    OUTPUT_SIZE = "output_size"
+    OTHER = "other"
+
+
+class WorkloadMetricRole(str, Enum):
+    EXPECTED = "expected"  # forecast or back-of-envelope estimate
+    OBSERVED = "observed"  # current production measurement
+    TARGET = "target"  # acceptance requirement
+
+
+class WorkloadMetric(BaseModel):
+    name: str = Field(
+        description="Include the statistic, e.g. p95 latency or monthly spend."
+    )
+    kind: WorkloadMetricKind
+    value: str = Field(
+        min_length=1,
+        description="Verbatim quantity, units, time basis and qualifiers; e.g. about 10k requests/day.",
+    )
+    role: WorkloadMetricRole
+
+
+class Workload(BaseModel):
+    description: Optional[str] = None
+    representative_inputs: List[str] = Field(
+        default_factory=list,
+        description="Actual example inputs; never invent gold answers.",
+    )
+    data_characteristics: List[str] = Field(
+        default_factory=list,
+        description="Domain, freshness, languages, geography, size, formats.",
+    )
+    request_mix: List[str] = Field(
+        default_factory=list,
+        description="Request categories and their stated shares or frequencies.",
+    )
+    metrics: List[WorkloadMetric] = Field(default_factory=list)
+    notes: List[str] = Field(default_factory=list)
+
+
 class TaskSpec(BaseModel):
     """The classified evaluation task."""
 
     title: str = Field(description="Short title for this evaluation task.")
     summary: str = Field(description="Two or three sentences describing the task.")
     subject: Subject
+    context: TaskContext = Field(default_factory=TaskContext)
+    workload: Workload = Field(default_factory=Workload)
     eval_types: List[EvalType] = Field(default_factory=list)
     kpis: List[KPI] = Field(default_factory=list)
     evidence: List[EvidenceItem] = Field(default_factory=list)
@@ -243,5 +304,10 @@ __all__ = [
     "Readiness",
     "Subject",
     "SubjectKind",
+    "TaskContext",
     "TaskSpec",
+    "Workload",
+    "WorkloadMetric",
+    "WorkloadMetricKind",
+    "WorkloadMetricRole",
 ]

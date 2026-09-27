@@ -15,7 +15,12 @@ from auto_eval.schema import (
     Provenance,
     Subject,
     SubjectKind,
+    TaskContext,
     TaskSpec,
+    Workload,
+    WorkloadMetric,
+    WorkloadMetricKind,
+    WorkloadMetricRole,
 )
 
 
@@ -48,6 +53,23 @@ def full_spec() -> TaskSpec:
     """A spec with every gap filled - the only shape that should read as ready."""
     return TaskSpec(
         title="Invoice extractor accuracy",
+        context=TaskContext(
+            overall_task="Automate accounts payable",
+            comparison_task="Extract invoice fields",
+            preferences=["Prioritize field accuracy"],
+        ),
+        workload=Workload(
+            description="Extract eight fields from invoice PDFs",
+            data_characteristics=["Printed English invoices"],
+            metrics=[
+                WorkloadMetric(
+                    name="Daily invoices",
+                    kind=WorkloadMetricKind.VOLUME,
+                    value="400/day",
+                    role=WorkloadMetricRole.EXPECTED,
+                )
+            ],
+        ),
         summary="Evaluate field-level accuracy of the invoice extraction pipeline.",
         subject=Subject(
             name="invoice extractor",

@@ -879,6 +879,7 @@ async function board() {
 
   const body = {
     cohort: $("b-cohort").value.trim() || null,
+    spec: lastSpec,
     cohort_path: $("b-cohort-path").value.trim() || null,
     dataset: $("b-items").value.trim() || null,
     dataset_path: $("b-items-path").value.trim() || null,

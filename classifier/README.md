@@ -3,11 +3,13 @@
 Turns a free-form "can you test this for me" into a structured evaluation task
 spec. First stage of the pipeline — everything downstream reads its `TaskSpec`.
 
-It extracts three things and then says what's missing:
+It extracts four things and then says what's missing:
 
 1. **What's being tested** — the artifact, how it's invoked, what's in and out of scope.
 2. **KPIs** — metrics and qualities that decide success, with thresholds where given.
 3. **Evidence** — docs, datasets, successful runs, known failures.
+4. **User context and workload** — the overall goal, narrower comparison task,
+   representative data, traffic estimates, operational targets and preferences.
 
 Anything the user didn't supply becomes an explicit question rather than a
 guess. See [task-spec.md](task-spec.md) for the field-by-field contract.

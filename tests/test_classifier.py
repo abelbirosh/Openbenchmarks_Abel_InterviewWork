@@ -92,6 +92,27 @@ def test_classify_runs_gap_analysis_on_the_model_output(sparse_spec):
     assert spec.open_questions
 
 
+def test_classification_keeps_workload_and_accepts_followup_answers(full_spec):
+    client = FakeClient(full_spec)
+    spec = classify(
+        "Compare invoice extractors for accounts payable",
+        client=client,
+        answers=[
+            Answer(
+                field="workload.metrics",
+                question="Expected volume?",
+                answer="400 invoices/day",
+            )
+        ],
+    )
+    assert spec.context.overall_task == "Automate accounts payable"
+    assert spec.workload.metrics[0].value == "400/day"
+    assert not any(q.field.startswith("workload.") for q in spec.open_questions)
+    system, user = client.completions.call["messages"]
+    assert "context.comparison_task" in system["content"]
+    assert "400 invoices/day" in user["content"]
+
+
 def test_a_thin_request_is_filled_in_rather_than_blocked(sparse_spec):
     """The holes a one-liner leaves are derivable, so nothing stops the run."""
     spec = classify("evaluate my support bot", client=FakeClient(sparse_spec))

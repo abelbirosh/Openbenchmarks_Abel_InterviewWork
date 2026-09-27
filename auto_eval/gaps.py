@@ -32,6 +32,7 @@ from .schema import (
     Readiness,
     TaskSpec,
 )
+from .workload import questions as workload_questions
 
 # Asking the same thing five times is worse than asking once; cap the per-KPI
 # rules so a spec with twenty metrics does not produce twenty questions.
@@ -247,6 +248,7 @@ def rule_questions(spec: TaskSpec) -> List[Question]:
             )
         )
 
+    out.extend(workload_questions(spec))
     return out
 
 

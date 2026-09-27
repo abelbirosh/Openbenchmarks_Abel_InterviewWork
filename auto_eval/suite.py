@@ -50,6 +50,7 @@ from .surface import (
 )
 from .verify import automatic_share
 from .verify import coverage_by_kpi as verifier_coverage
+from .workload import EXECUTION_LIMIT, brief
 
 
 class SuiteError(ClassifierError):
@@ -226,7 +227,10 @@ def build(
         f"{len([c for c in cases if c.source is CaseSource.SYNTHESISED])} synthesised.",
         f"Running it once means {len(cases)} x {agent_profile.samples} = {len(cases) * agent_profile.samples} agent runs.",
         *filled.notes,
+        *brief(settled),
     ]
+    if brief(settled):
+        notes.append(EXECUTION_LIMIT)
     if not decision.open:
         notes.append(f"Written past a closed gate: {decision.reason}")
 

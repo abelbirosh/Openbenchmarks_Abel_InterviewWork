@@ -37,6 +37,7 @@ class VerifierKind(str, Enum):
     EXECUTION = "execution"  # run something against the result
     SCHEMA = "schema"  # the output parses and validates
     TRACE_BUDGET = "trace_budget"  # steps, time, tokens, spend
+    WORKLOAD_TARGET = "workload_target"  # aggregate production requirement
     TOOL_REQUIRED = "tool_required"  # it had to call this
     TOOL_FORBIDDEN = "tool_forbidden"  # it must not have called this
     NO_ESCAPE = "no_escape"  # nothing touched outside the sandbox
@@ -62,6 +63,7 @@ READS_FOR_KIND = {
     VerifierKind.EXECUTION: Reads.ENVIRONMENT,
     VerifierKind.SCHEMA: Reads.ENVIRONMENT,
     VerifierKind.TRACE_BUDGET: Reads.TRACE,
+    VerifierKind.WORKLOAD_TARGET: Reads.TRACE,
     VerifierKind.TOOL_REQUIRED: Reads.TRACE,
     VerifierKind.TOOL_FORBIDDEN: Reads.TRACE,
     VerifierKind.NO_ESCAPE: Reads.BOTH,

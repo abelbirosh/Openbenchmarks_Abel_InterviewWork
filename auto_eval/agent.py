@@ -386,7 +386,13 @@ def _budget(spec: TaskSpec) -> Tuple[Budget, List[str]]:
     budget = Budget()
     notes: List[str] = []
 
+    # Production requirements are not per-episode execution ceilings. In
+    # particular, $100/month must never become a $300 allowance for one run.
+    workload_names = {m.name.strip().casefold() for m in spec.workload.metrics}
+
     for kpi in spec.kpis:
+        if kpi.name.strip().casefold() in workload_names:
+            continue
         source = f"{kpi.target or ''} {kpi.unit or ''}".strip().lower()
         value = _number(source) if kpi.target else None
         if value is None:

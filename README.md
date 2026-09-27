@@ -60,6 +60,14 @@ benchmark/
 
 ## Design Principles
 
+**Tailored to the user's workload.** The spec separates the overall product
+goal from the task being compared, and records example inputs, data mix,
+traffic estimates, cost/latency/throughput targets and preferences. These guide
+source discovery and case authoring and stay attached to reports. Expected
+traffic is distinct from acceptance targets and actual benchmark execution.
+See the [workload contract](classifier/task-spec.md) and
+[news-app example](examples/spec-news-workload.json).
+
 **Deterministic where possible.**
 Models assist with extraction, research, and semantic judgment; rules handle validation, sampling, scoring, and aggregation where possible.
 

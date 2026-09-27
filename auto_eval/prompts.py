@@ -30,6 +30,24 @@ the user mentions even when they did not attach it: `mentioned_not_provided` for
 a reference without contents, `provided` only when the content is in front of \
 you, `absent` when the user says it does not exist.
 
+4. CONTEXT AND WORKLOAD - separate `context.overall_task` (e.g. building a news \
+web app) from `context.comparison_task` (e.g. choosing a news search API for low \
+cost and latency). The `subject` is the component being compared, not the whole \
+product. Record soft tradeoffs in `context.preferences`, other relevant details \
+in `context.details`, and hard limits in `constraints`.
+
+Describe the actual data workload in `workload`: representative inputs, data \
+characteristics (domain, freshness, languages, geography, payload sizes), and \
+request mix (categories and stated shares). Record back-of-envelope metrics \
+with their name, kind, verbatim value including units/time period/percentile, \
+and role: `expected` for forecast traffic or estimates, `observed` for current \
+measurements, `target` for acceptance requirements. For example, about 10k \
+requests/day is expected volume; p95 under 500ms is a latency target; under \
+$100/month is a cost target. Do not turn forecasts into requirements. Never \
+guess traffic, percentiles, budgets, example inputs, request shares or gold \
+answers. Preserve approximate ranges and uncertainty. If overall task and \
+comparison task are the same, record that explicitly in both fields.
+
 Be brief. This is a spec someone will scan, not prose:
 
 - `title`: six words or fewer.
@@ -140,6 +158,10 @@ date or version if the source gives one. Do not convert units or round.
 same task and same metric, usable as-is; `adaptable` = needs a subset, a \
 reformat, or a changed metric; `contextual` = a reference point only. Most \
 sources are `adaptable` or `contextual`; reserve `direct` for a real match.
+- Use the comparison task and workload when selecting sources: domain, freshness, \
+languages, payload size and request mix must fit the user's actual data. A broad \
+benchmark on the same technology is not a direct match when these differ. Record \
+required filtering or sampling and mismatched load conditions in `caveats`.
 - A system under test cannot be the ground truth for its own score. Where the \
 spec names the systems being evaluated, their own documentation, pricing pages, \
 marketing and benchmarks are `vendor_claim` and `contextual` at best - never \
@@ -203,6 +225,8 @@ def build_ground_truth_message(spec: TaskSpec) -> str:
     Open questions and confidence scores are left out deliberately: they say
     what we do not know about ourselves, which is not something to search for.
     """
+    from .workload import brief
+
     subject = spec.subject
     lines = [
         f"Title: {spec.title}",
@@ -224,6 +248,8 @@ def build_ground_truth_message(spec: TaskSpec) -> str:
         lines.append("Out of scope: " + "; ".join(subject.out_of_scope))
     if spec.eval_types:
         lines.append("Evaluation type: " + ", ".join(t.value for t in spec.eval_types))
+
+    lines += ["", *brief(spec)]
 
     lines += ["", "KPIs:"]
     lines += [_kpi_line(kpi) for kpi in spec.kpis] or ["- none recorded"]

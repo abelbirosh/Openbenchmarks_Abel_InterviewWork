@@ -392,6 +392,11 @@ def grade(
 
         if kind is VerifierKind.TERMINATED:
             outcomes.append(_terminated(verifier, trace))
+        elif kind is VerifierKind.WORKLOAD_TARGET:
+            block(
+                verifier,
+                "This workload target needs aggregate measurements under the stated load and time basis; a single simulated trace cannot verify it.",
+            )
         elif kind is VerifierKind.TRACE_BUDGET:
             outcome, reason = _budget(verifier, case, trace)
             if outcome:
