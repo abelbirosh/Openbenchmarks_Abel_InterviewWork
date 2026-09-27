@@ -68,7 +68,7 @@ dark ground.
 ## Evidence on Hand
 
 Real: the pipeline, the CLI, run reports on disk, the ten-benchmark catalogue in
-`closed_bench/benchmarks.py`. No customers, testimonials, published case studies, or
+`closed_bench/benchmarks/__init__.py`. No customers, testimonials, published case studies, or
 pricing exist — future work must not invent them. The example request in the UI is
 illustrative and is labelled as such.
 

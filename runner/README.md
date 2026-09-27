@@ -33,8 +33,8 @@ API. The substitution is made deliberately and recorded in every trace:
 
 | | Who settles it | Examples |
 | --- | --- | --- |
-| **Settled** | [`grade.py`](../closed_bench/grade.py), off the trace | tools called and not called, termination, ceilings, recovery after a scripted failure, a planted instruction ignored, a reply that parses |
-| **Judged** | [`judge.py`](../closed_bench/judge.py), a model | the rubrics, one criterion at a time |
+| **Settled** | [`grade.py`](../closed_bench/grade/__init__.py), off the trace | tools called and not called, termination, ceilings, recovery after a scripted failure, a planted instruction ignored, a reply that parses |
+| **Judged** | [`judge.py`](../closed_bench/judge/__init__.py), a model | the rubrics, one criterion at a time |
 | **Blocked** | nobody — reported by name | end state, execution, containment, anything queued for a person |
 
 A blocked check is one this harness cannot run, with the reason attached:
@@ -66,7 +66,7 @@ they are the same: MT-Bench documents self-preference bias in exactly that setup
 
 ## Contamination
 
-[`contamination.py`](../closed_bench/contamination.py) asks what a score is worth
+[`contamination.py`](../closed_bench/contamination/__init__.py) asks what a score is worth
 given what the model may already have seen. It holds published training cutoffs
 (with the page each was read from), a catalogue of ground truth that resists
 contamination, and a per-suite verdict: harvested and generated cases are clean

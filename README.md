@@ -1,184 +1,30 @@
 # Closed_bench
 
-**Turn a description of what you want tested into a reproducible benchmark.**
+Closed_bench turns a plain-language testing goal into a repeatable evaluation. It
+extracts requirements, finds benchmarks and ground truth, builds test cases,
+runs systems under the same conditions, and reports scores with supporting
+traces. It includes a local web UI and the `closed-bench` command.
 
-Closed_bench is an open-source system for automatically designing, building, running, and maintaining evaluation suites for software and AI systems.
+## Setup
 
-Give it a goal like:
-
-```text
-Compare company enrichment APIs on accuracy, coverage, latency, and cost.
-```
-
-Closed_bench turns that into:
-
-```text
-Free-form request
-→ structured evaluation spec
-→ benchmark / ground-truth discovery
-→ cohort + test-case construction
-→ evaluation harness
-→ execution
-→ scoring
-→ comparison + reporting
-```
-
-## What it handles
-
-* Extracts the system under test, KPIs, scope, and success criteria
-* Finds relevant public benchmarks, datasets, and baselines
-* Builds representative test cases and coverage matrices
-* Constructs or verifies ground truth when needed
-* Generates adapters for APIs, agents, CLIs, and model endpoints
-* Runs systems under identical conditions
-* Measures accuracy, coverage, latency, cost, tokens, and failures
-* Uses deterministic checks, LLM judges, or human review as appropriate
-* Produces versioned, auditable benchmark results
-* Re-runs benchmarks over time and detects regressions
-
-## Example
-
-```text
-"Compare Apollo, People Data Labs, Exa, and Parallel
-for company enrichment."
-```
-
-Closed_bench can produce:
-
-```text
-benchmark/
-├── spec.json
-├── methodology.md
-├── cohort.jsonl
-├── ground_truth.jsonl
-├── adapters/
-├── cases/
-├── scorers/
-├── raw_runs/
-└── results.json
-```
-
-## Design Principles
-
-**Tailored to the user's workload.** The spec separates the overall product
-goal from the task being compared, and records example inputs, data mix,
-traffic estimates, cost/latency/throughput targets and preferences. These guide
-source discovery and case authoring and stay attached to reports. Expected
-traffic is distinct from acceptance targets and actual benchmark execution.
-See the [workload contract](classifier/task-spec.md) and
-[news-app example](examples/spec-news-workload.json).
-
-**Deterministic where possible.**
-Models assist with extraction, research, and semantic judgment; rules handle validation, sampling, scoring, and aggregation where possible.
-
-**Evidence over confidence.**
-Ground truth and judgments retain their supporting evidence.
-
-**Ground truth ≠ scoring policy.**
-What is true and what counts as correct are stored separately.
-
-**Reproducible by default.**
-Specs, suites, cases, scoring rules, and results are versioned and content-addressed.
-
-## Running it
-
-Everything after the request is a button. `closed-bench serve` puts the pipeline on
-one page: describe what you want tested, answer whatever blocks, find the ground
-truth, then **Run the benchmark** — one click writes the suite for that spec and
-runs every case against the provider, with the scores underneath and a link
-through to `/dashboard` for every verdict and the transcript it was read off. A
-dry run needs no API key.
-
-The same steps from the command line:
+Requires Python 3.10 or newer. From this repository:
 
 ```bash
-closed-bench classify "..." --json task.json   # request → spec
-closed-bench ground-truth -s task.json         # what already exists publicly
-closed-bench author -s task.json -o suites/x   # the cases and their checks
-closed-bench run suites/x                      # run them; --mock calls no provider
-closed-bench serve                             # the UI, dashboard at /dashboard
-closed-bench fresh --model gpt-5               # ground truth this model cannot have memorised
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -e '.[web]'
+cp .env.example .env
 ```
 
-A run's tools are declared to the model and answered inside the harness, so
-nothing touches a live system. That makes the trajectory checks real and the
-end-state checks impossible, so those are reported as **blocked, with the reason**
-rather than dropped — every pass rate sits next to the count of what did not run.
-[`runner/`](runner/) has the detail.
+Set `OPENAI_API_KEY` in `.env` for model-assisted steps. The example file lists
+optional model and run-directory settings. Then run `closed-bench serve` for
+the local UI, or `closed-bench --help` for the CLI. For development, install
+`.[dev,web]` and run `git config core.hooksPath .githooks` once to enable
+commit-time lint checks.
 
-## Comparing several systems
+## Engineering log
 
-Not everything under test has a trajectory. When the subject is an endpoint, a
-model, or a retrieval API, the question is which of several systems does the job
-best, and the answer is a board: one dataset, many systems, one row each, with
-accuracy, answer recall at 1 and 5, latency, errors and spend at the vendor's
-published price.
-
-```bash
-closed-bench board items.jsonl -c cohort.json    # or "Run the board" on the page
-closed-bench boards
-closed-bench harden items.jsonl -c cohort.json   # when a row reaches 100%
-```
-
-| System | Endpoint & configuration | Accuracy | AR@1 | AR@5 | p50 | Total $ | $ / 1k correct |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| Exa auto | POST /search type=auto | 100.0% | 80.0% | 100.0% | 1.27s | $0.0350 | $7.00 |
-| Exa fast | POST /search type=fast | 100.0% | 80.0% | 100.0% | 416ms | $0.0350 | $7.00 |
-| Exa fast, model with tool | the model, with that endpoint as its only tool | 80.0% | — | — | 7.39s | $0.1352 | $33.80 |
-| Firecrawl | POST /v2/search limit=10 | 80.0% | 20.0% | 60.0% | 944ms | — | — |
-| Firecrawl, model with tool | the model, with that endpoint as its only tool | 40.0% | — | — | 14.94s | $0.0160 | $7.99 |
-| model only (no search) | the model answering from memory | 0.0% | — | — | 2.88s | — | — |
-| TinyFish | GET api.search.tinyfish.ai | 100.0% | 20.0% | 100.0% | 689ms | $0.0000 | $0.0000 |
-| TinyFish, model with tool | the model, with that endpoint as its only tool | 100.0% | — | — | 9.10s | $0.0058 | $1.16 |
-
-The first row is the point. **Model only** is the same model with no endpoint at
-all: on items published after its training cutoff it should score near zero, and
-when it does, every other row is measuring retrieval rather than recall. A vendor
-that prices in credits rather than per call has blank cost cells rather than a
-converted guess. What is
-held constant — the items, the model, the judge — is recorded on the board, rows
-are alphabetical because no single column decides the answer, and a vendor whose
-key is missing is reported as not run rather than scored as bad. [`board/`](board/)
-has the detail.
-
-A row at 100% is the other thing a board can report, and it is a fault in the
-dataset rather than a result: every system at the ceiling is tied and the gaps
-that matter are invisible. `closed-bench harden` closes that loop — it runs the
-board, takes the items holding a perfect row up, asks for a harder fact from
-each item's own source document, keeps only the replacements whose answer it can
-find in the page it fetched, and runs the board again.
-
-## Contamination
-
-A public suite older than the model measures capability and recall at once. Every
-run report says which of its cases the model could already have seen: cases
-harvested from your own runs or generated from your spec are clean by
-construction, and one adapted from a public suite is only as clean as that
-suite's publication date. `closed-bench fresh` lists the ground truth that resists
-the problem — suites refreshed on a schedule, suites whose answers were never
-published — judged against a model's published cutoff.
-
-## Vision
-
-Building a serious benchmark currently requires manual research, dataset design, integration work, scoring logic, and reporting.
-
-Closed_bench aims to reduce that workflow to:
-
-```text
-Describe the evaluation
-→ inspect the methodology
-→ run the benchmark
-→ reproduce the result
-```
-
-**Closed_bench is infrastructure for turning evaluation questions into evidence.**
-
-## License
-
-Copyright 2026 Abel Birosh.
-
-Licensed under the [GNU General Public License, version 3 only](LICENSE)
-(`GPL-3.0-only`). You may use, modify, and distribute Closed_bench, including
-commercially. If you distribute modified versions, you must license them under
-GPLv3 and provide the corresponding source code as required by the license.
-Closed_bench comes with no warranty. Contributions are accepted under the same terms.
+| Date | Context | Change | Result |
+| --- | --- | --- | --- |
+| 2026-09-27 | Flat source layout made modules hard to navigate. | Put each Python module in its own package directory and keep import paths stable. | Clear ownership without changing the public Python imports. |
+| 2026-09-27 | Project name and license needed to reflect the current direction. | Renamed Auto-Eval to Closed_bench and changed the license to GPLv3. | Consistent project naming and GPLv3 terms for new releases. |

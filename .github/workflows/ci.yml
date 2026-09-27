@@ -2,7 +2,6 @@ name: CI
 
 on:
   push:
-    branches: [main]
   pull_request:
   workflow_dispatch:
 
@@ -31,7 +30,7 @@ jobs:
           cache: pip
           cache-dependency-path: pyproject.toml
 
-      # The web extra is installed so mypy can see FastAPI in closed_bench/web.py.
+      # The web extra is installed so mypy can see FastAPI in closed_bench/web/__init__.py.
       - name: Install
         run: pip install -e ".[dev,web]"
 
@@ -94,7 +93,8 @@ jobs:
           python -m venv /tmp/smoke
           /tmp/smoke/bin/pip install dist/*.whl
           /tmp/smoke/bin/closed-bench --help
-          /tmp/smoke/bin/python -c "import importlib.resources as r, closed_bench; assert all((r.files('closed_bench') / 'static' / page).is_file() for page in ('index.html', 'dashboard.html'))"
+          /tmp/smoke/bin/python -m closed_bench.cli --help > /dev/null
+          /tmp/smoke/bin/python -c "import importlib.resources as r, closed_bench; assert all((r.files('closed_bench.web') / 'static' / page).is_file() for page in ('index.html', 'dashboard.html'))"
           # The offline blocks have to work from a clean install with no key.
           /tmp/smoke/bin/closed-bench fresh > /dev/null
 

@@ -30,7 +30,7 @@ closed-bench = "closed_bench.cli:main"
 include = ["closed_bench*"]
 
 [tool.setuptools.package-data]
-closed_bench = ["static/*.html"]
+"closed_bench.web" = ["static/*.html"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

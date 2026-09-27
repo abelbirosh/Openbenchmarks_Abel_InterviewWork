@@ -1,13 +1,13 @@
 ---
 version: 1
 slug: "closed-bench-static-dashboard-html"
-primary_target: "closed_bench/static/dashboard.html"
-related_targets: ["closed_bench/static/index.html"]
+primary_target: "closed_bench/web/static/dashboard.html"
+related_targets: ["closed_bench/web/static/index.html"]
 ---
 
 # Surface brief — Closed_bench web UI
 
-Scope: `closed_bench/static/dashboard.html` (runs) and `closed_bench/static/index.html`
+Scope: `closed_bench/web/static/dashboard.html` (runs) and `closed_bench/web/static/index.html`
 (classifier). Visitor mode: **Operate**.
 
 Audience and job: someone choosing between providers who needs a defensible

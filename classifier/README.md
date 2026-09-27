@@ -102,15 +102,15 @@ classified, not obeyed.
 
 | Path | What's in it |
 | --- | --- |
-| [schema.py](../closed_bench/schema.py) | `TaskSpec` — the contract everything downstream reads. |
-| [prompts.py](../closed_bench/prompts.py) | The extraction system prompt. |
-| [classifier.py](../closed_bench/classifier.py) | The API call, error mapping, input limits. |
-| [derive.py](../closed_bench/derive.py) | Fills the holes the spec implies, before any question is asked. |
-| [benchmarks.py](../closed_bench/benchmarks.py) | Ten real public benchmarks, matched onto a spec offline. |
-| [gaps.py](../closed_bench/gaps.py) | Rule-based gap analysis and the readiness verdict. |
-| [render.py](../closed_bench/render.py) | `TaskSpec` → task document. |
-| [config.py](../closed_bench/config.py) | `.env` loading and provider settings. |
-| [cli.py](../closed_bench/cli.py) · [web.py](../closed_bench/web.py) | The `closed-bench` command and the web UI. |
+| [schema.py](../closed_bench/schema/__init__.py) | `TaskSpec` — the contract everything downstream reads. |
+| [prompts.py](../closed_bench/prompts/__init__.py) | The extraction system prompt. |
+| [classifier.py](../closed_bench/classifier/__init__.py) | The API call, error mapping, input limits. |
+| [derive.py](../closed_bench/derive/__init__.py) | Fills the holes the spec implies, before any question is asked. |
+| [benchmarks.py](../closed_bench/benchmarks/__init__.py) | Ten real public benchmarks, matched onto a spec offline. |
+| [gaps.py](../closed_bench/gaps/__init__.py) | Rule-based gap analysis and the readiness verdict. |
+| [render.py](../closed_bench/render/__init__.py) | `TaskSpec` → task document. |
+| [config.py](../closed_bench/config/__init__.py) | `.env` loading and provider settings. |
+| [cli.py](../closed_bench/cli/__init__.py) · [web.py](../closed_bench/web/__init__.py) | The `closed-bench` command and the web UI. |
 
 ## Tests
 

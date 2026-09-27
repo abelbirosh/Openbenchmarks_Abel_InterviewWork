@@ -41,7 +41,7 @@ training cutoff it should score near zero — and when it does, every other row 
 the board is measuring retrieval rather than recall. When it does not, the board
 says so at the top and the number to fix is the dataset, not the vendor.
 
-This is the same argument [`contamination.py`](../closed_bench/contamination.py)
+This is the same argument [`contamination.py`](../closed_bench/contamination/__init__.py)
 makes about public suites, run as an experiment instead of an inference: rather
 than reasoning about what the model might have seen, ask it.
 

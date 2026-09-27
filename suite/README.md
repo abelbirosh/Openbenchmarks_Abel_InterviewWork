@@ -18,12 +18,12 @@ diffed rather than regenerated into something subtly different.
 
 | Module | Question | Output |
 | --- | --- | --- |
-| [`agent.py`](../closed_bench/agent.py) | What can we drive, and is it safe to drive it? | `AgentProfile` + a gate |
-| [`surface.py`](../closed_bench/surface.py) | What should be tested? | `CoverageMatrix` |
-| [`authoring.py`](../closed_bench/authoring.py) | Where do the cases come from? | `Case[]` |
-| [`verify.py`](../closed_bench/verify.py) | How does each case get scored? | `Verifier[]` |
+| [`agent.py`](../closed_bench/agent/__init__.py) | What can we drive, and is it safe to drive it? | `AgentProfile` + a gate |
+| [`surface.py`](../closed_bench/surface/__init__.py) | What should be tested? | `CoverageMatrix` |
+| [`authoring.py`](../closed_bench/authoring/__init__.py) | Where do the cases come from? | `Case[]` |
+| [`verify.py`](../closed_bench/verify/__init__.py) | How does each case get scored? | `Verifier[]` |
 
-[`suite.py`](../closed_bench/suite.py) freezes the result into the artefact block 5
+[`suite.py`](../closed_bench/suite/__init__.py) freezes the result into the artefact block 5
 runs.
 
 ## 1. Profile, and the gate
@@ -69,7 +69,7 @@ In the order they are trusted:
    state is known; an incident you remember is a regression case that is, by
    construction, about something that really breaks. Best data in the building,
    and it arrives free with the spec.
-2. **Adapted** — a public suite the [catalogue](../closed_bench/benchmarks.py)
+2. **Adapted** — a public suite the [catalogue](../closed_bench/benchmarks/__init__.py)
    matched. Real tasks, real scoring, and a contamination problem: anything
    public may already be in the agent's training data, so every adapted case
    carries its source.

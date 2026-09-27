@@ -157,7 +157,7 @@ A source whose fit is only contextual is never opened at all.
 ## What it is allowed to touch
 
 This stage is the only part of Closed_bench that opens a URL, and those URLs were
-proposed by a model, so [fetch.py](../closed_bench/fetch.py) refuses rather than
+proposed by a model, so [fetch.py](../closed_bench/fetch/__init__.py) refuses rather than
 trusts:
 
 - **http(s) only.**
@@ -213,12 +213,12 @@ searched on, not obeyed.
 
 | Path | What's in it |
 | --- | --- |
-| [ground_truth.py](../closed_bench/ground_truth.py) | The gate, the report models, the search call, and `assess`. |
-| [analysis.py](../closed_bench/analysis.py) | Dataset and page assessment, the download plan, and the verification that decides what is kept. |
-| [fetch.py](../closed_bench/fetch.py) | Guarded HTTP and the dataset metadata endpoints. |
-| [prompts.py](../closed_bench/prompts.py) | The three prompts: search, dataset assessment, page assessment. |
-| [render.py](../closed_bench/render.py) | `GroundTruthReport` and `AnalysisReport` → documents. |
-| [cli.py](../closed_bench/cli.py) · [web.py](../closed_bench/web.py) | `closed-bench ground-truth` and `POST /api/ground-truth`, `/api/analyze`. |
+| [ground_truth.py](../closed_bench/ground_truth/__init__.py) | The gate, the report models, the search call, and `assess`. |
+| [analysis.py](../closed_bench/analysis/__init__.py) | Dataset and page assessment, the download plan, and the verification that decides what is kept. |
+| [fetch.py](../closed_bench/fetch/__init__.py) | Guarded HTTP and the dataset metadata endpoints. |
+| [prompts.py](../closed_bench/prompts/__init__.py) | The three prompts: search, dataset assessment, page assessment. |
+| [render.py](../closed_bench/render/__init__.py) | `GroundTruthReport` and `AnalysisReport` → documents. |
+| [cli.py](../closed_bench/cli/__init__.py) · [web.py](../closed_bench/web/__init__.py) | `closed-bench ground-truth` and `POST /api/ground-truth`, `/api/analyze`. |
 
 ## Tests
 
@@ -246,7 +246,7 @@ The search is told to prefer ground truth that resists this — suites refreshed
 on a schedule, suites whose answers were never published, anything released
 after the model stopped training — and to report the older standard suite as
 well where it fits, saying which is which.
-[`closed_bench/contamination.py`](../closed_bench/contamination.py) is the
+[`closed_bench/contamination/__init__.py`](../closed_bench/contamination/__init__.py) is the
 deterministic counterpart: published cutoffs with the page each was read from,
 and a small catalogue of contamination-resistant suites, printed by `closed-bench
 fresh --model <model>`.
