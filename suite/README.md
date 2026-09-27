@@ -18,12 +18,12 @@ diffed rather than regenerated into something subtly different.
 
 | Module | Question | Output |
 | --- | --- | --- |
-| [`agent.py`](../auto_eval/agent.py) | What can we drive, and is it safe to drive it? | `AgentProfile` + a gate |
-| [`surface.py`](../auto_eval/surface.py) | What should be tested? | `CoverageMatrix` |
-| [`authoring.py`](../auto_eval/authoring.py) | Where do the cases come from? | `Case[]` |
-| [`verify.py`](../auto_eval/verify.py) | How does each case get scored? | `Verifier[]` |
+| [`agent.py`](../closed_bench/agent.py) | What can we drive, and is it safe to drive it? | `AgentProfile` + a gate |
+| [`surface.py`](../closed_bench/surface.py) | What should be tested? | `CoverageMatrix` |
+| [`authoring.py`](../closed_bench/authoring.py) | Where do the cases come from? | `Case[]` |
+| [`verify.py`](../closed_bench/verify.py) | How does each case get scored? | `Verifier[]` |
 
-[`suite.py`](../auto_eval/suite.py) freezes the result into the artefact block 5
+[`suite.py`](../closed_bench/suite.py) freezes the result into the artefact block 5
 runs.
 
 ## 1. Profile, and the gate
@@ -69,7 +69,7 @@ In the order they are trusted:
    state is known; an incident you remember is a regression case that is, by
    construction, about something that really breaks. Best data in the building,
    and it arrives free with the spec.
-2. **Adapted** — a public suite the [catalogue](../auto_eval/benchmarks.py)
+2. **Adapted** — a public suite the [catalogue](../closed_bench/benchmarks.py)
    matched. Real tasks, real scoring, and a contamination problem: anything
    public may already be in the agent's training data, so every adapted case
    carries its source.
@@ -121,10 +121,10 @@ confident it sounds. A check that never ran counts as failed, not as absent.
 ## Run
 
 ```bash
-auto-eval profile -s task.json          # what it takes to run it, and whether we can
-auto-eval author  -s task.json -o suites/support-agent
-auto-eval suite   suites/support-agent  # read it back
-auto-eval suite   suites/support-agent --case 5736ae   # one case in full
+closed-bench profile -s task.json          # what it takes to run it, and whether we can
+closed-bench author  -s task.json -o suites/support-agent
+closed-bench suite   suites/support-agent  # read it back
+closed-bench suite   suites/support-agent --case 5736ae   # one case in full
 ```
 
 `profile` exits `2` when the agent cannot be run, and `author` refuses for the
@@ -134,7 +134,7 @@ of the grid asks for.
 From Python:
 
 ```python
-from auto_eval import build_suite, render_suite
+from closed_bench import build_suite, render_suite
 
 suite = build_suite(spec)
 print(render_suite(suite))

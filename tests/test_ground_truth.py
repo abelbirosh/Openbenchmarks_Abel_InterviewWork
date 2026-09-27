@@ -2,7 +2,7 @@ import types
 
 import pytest
 
-from auto_eval.ground_truth import (
+from closed_bench.ground_truth import (
     Access,
     Availability,
     BaselineValue,
@@ -16,8 +16,8 @@ from auto_eval.ground_truth import (
     gate,
     identify,
 )
-from auto_eval.prompts import build_ground_truth_message
-from auto_eval.schema import Question
+from closed_bench.prompts import build_ground_truth_message
+from closed_bench.schema import Question
 
 
 def source(**kwargs):
@@ -73,7 +73,7 @@ class FakeClient:
 
 
 def test_gate_stays_shut_while_a_blocking_question_is_open(subjectless_spec):
-    from auto_eval.gaps import analyze
+    from closed_bench.gaps import analyze
 
     decision = gate(analyze(subjectless_spec))
     assert decision.open is False
@@ -83,13 +83,13 @@ def test_gate_stays_shut_while_a_blocking_question_is_open(subjectless_spec):
 
 def test_a_thin_but_intelligible_request_does_not_hold_the_gate_shut(sparse_spec):
     """A one-line request is thin, not unusable: derive fills it and it passes."""
-    from auto_eval.gaps import analyze
+    from closed_bench.gaps import analyze
 
     assert gate(analyze(sparse_spec)).open is True
 
 
 def test_gate_opens_once_nothing_blocks(full_spec):
-    from auto_eval.gaps import analyze
+    from closed_bench.gaps import analyze
 
     decision = gate(analyze(full_spec))
     assert decision.open is True
@@ -109,14 +109,14 @@ def test_gate_refuses_a_hand_built_spec_with_no_kpis(full_spec):
 
 
 def test_identify_refuses_to_search_behind_a_shut_gate(subjectless_spec):
-    from auto_eval.gaps import analyze
+    from closed_bench.gaps import analyze
 
     with pytest.raises(GroundTruthError, match="Not ready to search"):
         identify(analyze(subjectless_spec), client=FakeClient(findings()))
 
 
 def test_force_searches_anyway(subjectless_spec):
-    from auto_eval.gaps import analyze
+    from closed_bench.gaps import analyze
 
     report = identify(
         analyze(subjectless_spec), client=FakeClient(findings()), force=True
@@ -330,7 +330,7 @@ def test_the_report_records_whether_we_already_hold_labels(full_spec, sparse_spe
 
 
 def test_the_verdict_takes_the_best_covered_kpi(full_spec):
-    from auto_eval.schema import KPI, Direction, Measurement, MetricKind
+    from closed_bench.schema import KPI, Direction, Measurement, MetricKind
 
     full_spec.kpis.append(
         KPI(
@@ -397,15 +397,15 @@ def test_an_unparsable_response_names_the_status(full_spec):
 
 
 def test_the_search_model_can_be_set_separately(full_spec, monkeypatch):
-    monkeypatch.setenv("AUTO_EVAL_MODEL", "gpt-5-mini")
-    monkeypatch.setenv("AUTO_EVAL_SEARCH_MODEL", "gpt-5")
+    monkeypatch.setenv("CLOSED_BENCH_MODEL", "gpt-5-mini")
+    monkeypatch.setenv("CLOSED_BENCH_SEARCH_MODEL", "gpt-5")
     client = FakeClient(findings())
     identify(full_spec, client=client)
     assert client.responses.calls[0]["model"] == "gpt-5"
 
 
 def test_an_explicit_model_beats_the_search_variable(full_spec, monkeypatch):
-    monkeypatch.setenv("AUTO_EVAL_SEARCH_MODEL", "gpt-5")
+    monkeypatch.setenv("CLOSED_BENCH_SEARCH_MODEL", "gpt-5")
     client = FakeClient(findings())
     identify(full_spec, client=client, model="gpt-4o")
     assert client.responses.calls[0]["model"] == "gpt-4o"
@@ -421,7 +421,7 @@ def test_the_message_leaves_out_what_cannot_be_searched_for(full_spec):
 
 def test_a_source_with_no_publication_date_is_called_out(full_spec):
     """A score on data older than the model is partly a memory test."""
-    from auto_eval.ground_truth import (
+    from closed_bench.ground_truth import (
         Access,
         ExternalSource,
         Fit,

@@ -14,23 +14,23 @@ from pathlib import Path
 from typing import Optional
 
 # OpenAI's cheap, fast tier. Structured outputs are supported here, which is all
-# this classifier needs. Override with AUTO_EVAL_MODEL if your account does not
+# this classifier needs. Override with CLOSED_BENCH_MODEL if your account does not
 # have this model.
 DEFAULT_MODEL = "gpt-5-mini"
 
 API_KEY_VAR = "OPENAI_API_KEY"
-MODEL_VAR = "AUTO_EVAL_MODEL"
-BASE_URL_VAR = "AUTO_EVAL_BASE_URL"
+MODEL_VAR = "CLOSED_BENCH_MODEL"
+BASE_URL_VAR = "CLOSED_BENCH_BASE_URL"
 # The ground-truth search reads the open web and is worth spending more on than
 # extraction; left unset it uses the same model as everything else.
-SEARCH_MODEL_VAR = "AUTO_EVAL_SEARCH_MODEL"
+SEARCH_MODEL_VAR = "CLOSED_BENCH_SEARCH_MODEL"
 # The model a run puts under test, and the model that judges the rubrics. They
 # are deliberately separable: a model grading its own work has a documented
 # self-preference bias, and the run report warns when these two are the same.
-SUBJECT_MODEL_VAR = "AUTO_EVAL_SUBJECT_MODEL"
-JUDGE_MODEL_VAR = "AUTO_EVAL_JUDGE_MODEL"
-# Where `auto-eval run` writes its results and where the dashboard reads them.
-RUNS_DIR_VAR = "AUTO_EVAL_RUNS_DIR"
+SUBJECT_MODEL_VAR = "CLOSED_BENCH_SUBJECT_MODEL"
+JUDGE_MODEL_VAR = "CLOSED_BENCH_JUDGE_MODEL"
+# Where `closed-bench run` writes its results and where the dashboard reads them.
+RUNS_DIR_VAR = "CLOSED_BENCH_RUNS_DIR"
 DEFAULT_RUNS_DIR = "runs"
 
 _ENV_LOADED = False

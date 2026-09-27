@@ -8,7 +8,7 @@ if TYPE_CHECKING:  # annotations only - this module holds no runtime imports
     from .schema import KPI, Answer, TaskSpec
 
 SYSTEM_PROMPT = """\
-You are the input classifier for Auto_Eval, a system that builds evaluations for \
+You are the input classifier for Closed_bench, a system that builds evaluations for \
 software and AI systems. A user describes, in free form, something they want \
 evaluated. You turn that description into a structured task specification.
 
@@ -129,7 +129,7 @@ def build_user_message(text: str, answers: Sequence["Answer"] = ()) -> str:
 
 
 GROUND_TRUTH_SYSTEM_PROMPT = """\
-You are the ground truth identifier for Auto_Eval. You are given an evaluation \
+You are the ground truth identifier for Closed_bench. You are given an evaluation \
 task spec that has already been classified. Search the web and report what \
 already exists publicly that this evaluation could be anchored on.
 
@@ -274,7 +274,7 @@ def build_ground_truth_message(spec: TaskSpec) -> str:
     return GROUND_TRUTH_TEMPLATE.format(spec="\n".join(lines))
 
 
-# The two prompts below are the only place in Auto_Eval where anything fetched
+# The two prompts below are the only place in Closed_bench where anything fetched
 # from the open web reaches a model. Both say so, at length: it is data.
 
 DATASET_ASSESSMENT_SYSTEM_PROMPT = """\

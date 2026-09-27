@@ -1,9 +1,15 @@
 import pytest
 
-from auto_eval.board import BoardError, list_boards, load_board, run_board, write_board
-from auto_eval.cohort import SystemKind
-from auto_eval.cohort import parse as parse_cohort
-from auto_eval.dataset import parse as parse_dataset
+from closed_bench.board import (
+    BoardError,
+    list_boards,
+    load_board,
+    run_board,
+    write_board,
+)
+from closed_bench.cohort import SystemKind
+from closed_bench.cohort import parse as parse_cohort
+from closed_bench.dataset import parse as parse_dataset
 
 ITEMS = "\n".join(
     [
@@ -251,7 +257,7 @@ def test_a_missing_board_says_so(tmp_path):
 
 def test_a_row_that_never_answers_is_wrong_not_excused():
     """Setting it aside as an error would flatter the row by shrinking its denominator."""
-    from auto_eval.board import MAX_TOOL_STEPS
+    from closed_bench.board import MAX_TOOL_STEPS
 
     class NeverAnswers(FakeModel):
         def create(self, **kwargs):

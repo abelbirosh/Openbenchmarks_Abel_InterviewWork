@@ -1,6 +1,6 @@
 """Analyse the sources the identifier found, without downloading any of them.
 
-`auto_eval.ground_truth` says where the labelled data and the published numbers
+`closed_bench.ground_truth` says where the labelled data and the published numbers
 are. This stage goes and looks at each one - does the link resolve, what is
 actually behind it, what would a later step have to fetch - and hands back a
 link plus an analysis for each. The data itself is deliberately left where it

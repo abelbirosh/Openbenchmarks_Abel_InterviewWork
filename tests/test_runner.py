@@ -2,9 +2,9 @@ import json
 
 import pytest
 
-from auto_eval.contamination import parse_cutoff
-from auto_eval.provider import MockClient
-from auto_eval.runner import (
+from closed_bench.contamination import parse_cutoff
+from closed_bench.provider import MockClient
+from closed_bench.runner import (
     CaseStatus,
     RunError,
     SampleRun,
@@ -15,9 +15,9 @@ from auto_eval.runner import (
     run_suite,
     write_run,
 )
-from auto_eval.suite import Split, build
-from auto_eval.trace import StopReason, Usage
-from auto_eval.verify import CaseResult, VerifierKind
+from closed_bench.suite import Split, build
+from closed_bench.trace import StopReason, Usage
+from closed_bench.verify import CaseResult, VerifierKind
 
 
 def _sample(status: CaseStatus, sample: int = 0) -> SampleRun:

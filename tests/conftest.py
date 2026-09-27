@@ -1,6 +1,6 @@
 import pytest
 
-from auto_eval.schema import (
+from closed_bench.schema import (
     KPI,
     Confidence,
     Direction,

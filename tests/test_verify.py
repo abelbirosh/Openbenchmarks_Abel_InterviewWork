@@ -1,6 +1,6 @@
-from auto_eval.agent import profile
-from auto_eval.schema import KPI, Direction, Measurement, MetricKind
-from auto_eval.verify import (
+from closed_bench.agent import profile
+from closed_bench.schema import KPI, Direction, Measurement, MetricKind
+from closed_bench.verify import (
     AUTOMATIC_KINDS,
     Outcome,
     Reads,

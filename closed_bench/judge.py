@@ -5,7 +5,7 @@ the whole difficulty is that a model asked "did this pass?" will say yes
 agreeably. Two rules make the answer reviewable:
 
 1. **Quote or fail.** The ruling must carry a verbatim span from the transcript.
-   `auto_eval.verify.accept` already voids a pass with an empty quote; this
+   `closed_bench.verify.accept` already voids a pass with an empty quote; this
    module goes further and voids a quote that is not actually in the transcript,
    which is the failure mode that matters - a fabricated quote reads exactly
    like a real one in a report.

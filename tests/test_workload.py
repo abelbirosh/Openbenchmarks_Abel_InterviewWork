@@ -1,12 +1,12 @@
 import pytest
 
-from auto_eval.authoring import CaseSource
-from auto_eval.derive import derive
-from auto_eval.gaps import analyze
-from auto_eval.prompts import build_ground_truth_message
-from auto_eval.render import render_markdown
-from auto_eval.runner import run_suite
-from auto_eval.schema import (
+from closed_bench.authoring import CaseSource
+from closed_bench.derive import derive
+from closed_bench.gaps import analyze
+from closed_bench.prompts import build_ground_truth_message
+from closed_bench.render import render_markdown
+from closed_bench.runner import run_suite
+from closed_bench.schema import (
     Measurement,
     Readiness,
     TaskContext,
@@ -14,9 +14,9 @@ from auto_eval.schema import (
     Workload,
     WorkloadMetric,
 )
-from auto_eval.suite import build, verify_digest
-from auto_eval.surface import behaviours_for
-from auto_eval.verify import VerifierKind
+from closed_bench.suite import build, verify_digest
+from closed_bench.surface import behaviours_for
+from closed_bench.verify import VerifierKind
 
 
 def news_workload():

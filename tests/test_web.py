@@ -5,10 +5,10 @@ pytest.importorskip("httpx")
 
 from fastapi.testclient import TestClient
 
-import auto_eval.web as web
-from auto_eval.classifier import ClassifierError
-from auto_eval.config import Settings
-from auto_eval.gaps import analyze
+import closed_bench.web as web
+from closed_bench.classifier import ClassifierError
+from closed_bench.config import Settings
+from closed_bench.gaps import analyze
 
 
 @pytest.fixture
@@ -19,7 +19,7 @@ def client():
 def test_index_serves_the_page(client):
     response = client.get("/")
     assert response.status_code == 200
-    assert "Auto_Eval" in response.text
+    assert "Closed_bench" in response.text
     assert "/api/classify" in response.text
     # The page posts answers back and gates the button on them being filled.
     assert "submitAnswers" in response.text
@@ -149,7 +149,7 @@ def test_missing_text_is_a_validation_error(client):
 def test_ground_truth_returns_a_report_for_an_unblocked_spec(
     client, monkeypatch, full_spec
 ):
-    from auto_eval.ground_truth import SourceFindings, assess
+    from closed_bench.ground_truth import SourceFindings, assess
 
     captured = {}
 
@@ -202,14 +202,14 @@ def test_a_spec_that_arrives_claiming_readiness_is_re_checked(
 
 
 def test_analyze_returns_the_analysis_and_the_document(client, monkeypatch, full_spec):
-    from auto_eval.analysis import (
+    from closed_bench.analysis import (
         AnalysisReport,
         DownloadPlan,
         Reachability,
         ResourceAnalysis,
         Usability,
     )
-    from auto_eval.ground_truth import Availability, GroundTruthReport, SourceKind
+    from closed_bench.ground_truth import Availability, GroundTruthReport, SourceKind
 
     captured = {}
 
@@ -259,7 +259,11 @@ def test_analyze_returns_the_analysis_and_the_document(client, monkeypatch, full
 
 
 def test_analysis_errors_become_readable_400s(client, monkeypatch, full_spec):
-    from auto_eval.ground_truth import Availability, GroundTruthError, GroundTruthReport
+    from closed_bench.ground_truth import (
+        Availability,
+        GroundTruthError,
+        GroundTruthReport,
+    )
 
     def boom(spec, report, **kwargs):
         raise GroundTruthError("Rate limited or out of quota.")
@@ -284,7 +288,7 @@ def test_analysis_errors_become_readable_400s(client, monkeypatch, full_spec):
 
 @pytest.fixture
 def written_suite(tmp_path, agent_spec):
-    from auto_eval.suite import build, write
+    from closed_bench.suite import build, write
 
     suite = build(agent_spec)
     write(suite, tmp_path / "suites" / suite.name)
@@ -293,12 +297,12 @@ def written_suite(tmp_path, agent_spec):
 
 @pytest.fixture
 def written_run(tmp_path, written_suite, monkeypatch):
-    from auto_eval.provider import MockClient
-    from auto_eval.runner import run_suite, write_run
+    from closed_bench.provider import MockClient
+    from closed_bench.runner import run_suite, write_run
 
     run = run_suite(written_suite, mock=True, samples=1, limit=3, client=MockClient())
     write_run(run, tmp_path / "runs")
-    monkeypatch.setenv("AUTO_EVAL_RUNS_DIR", str(tmp_path / "runs"))
+    monkeypatch.setenv("CLOSED_BENCH_RUNS_DIR", str(tmp_path / "runs"))
     return run.report
 
 
@@ -387,7 +391,7 @@ def test_starting_a_run_of_something_that_is_not_a_suite_is_a_readable_400(
 def test_a_real_run_without_a_key_is_refused_before_it_starts(
     client, tmp_path, written_suite, monkeypatch
 ):
-    from auto_eval.config import Settings
+    from closed_bench.config import Settings
 
     monkeypatch.setattr(
         web,
@@ -416,7 +420,7 @@ def test_the_page_offers_the_benchmark_once_ground_truth_is_done(client):
 
 
 def test_a_benchmark_authors_the_suite_and_runs_it(client, tmp_path, agent_spec):
-    from auto_eval.gaps import analyze as settle
+    from closed_bench.gaps import analyze as settle
 
     response = client.post(
         "/api/benchmark",
@@ -455,7 +459,7 @@ def test_a_closed_agent_gate_comes_back_as_a_question_not_an_error(
     client, tmp_path, agent_spec
 ):
     """A suite written against an agent nobody can start is a document, not a test."""
-    from auto_eval.gaps import analyze as settle
+    from closed_bench.gaps import analyze as settle
 
     agent_spec.subject.interface = None
     agent_spec.evidence = []
@@ -479,8 +483,8 @@ def test_a_closed_agent_gate_comes_back_as_a_question_not_an_error(
 def test_a_benchmark_without_a_key_is_refused_before_the_suite_is_written(
     client, tmp_path, agent_spec, monkeypatch
 ):
-    from auto_eval.config import Settings
-    from auto_eval.gaps import analyze as settle
+    from closed_bench.config import Settings
+    from closed_bench.gaps import analyze as settle
 
     monkeypatch.setattr(
         web,
@@ -526,7 +530,7 @@ def _finished(client, job, tries=200):
 @pytest.fixture
 def board_run(client, tmp_path, monkeypatch, full_spec):
     """A board over one item, with both the model and the vendor stubbed."""
-    from auto_eval import board as board_module
+    from closed_bench import board as board_module
 
     class _Obj:
         def __init__(self, **kwargs):
@@ -578,7 +582,7 @@ def board_run(client, tmp_path, monkeypatch, full_spec):
     assert started.status_code == 200, started.json()
     job = _finished(client, started.json())
     assert job["state"] == "done", job.get("error")
-    monkeypatch.setenv("AUTO_EVAL_RUNS_DIR", str(tmp_path / "runs"))
+    monkeypatch.setenv("CLOSED_BENCH_RUNS_DIR", str(tmp_path / "runs"))
     return job
 
 
@@ -628,7 +632,7 @@ def test_a_cohort_that_is_not_one_is_a_readable_400(client):
 
 
 def test_a_board_without_a_key_is_refused_before_it_starts(client, monkeypatch):
-    from auto_eval.config import Settings
+    from closed_bench.config import Settings
 
     monkeypatch.setattr(
         web,

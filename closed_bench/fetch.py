@@ -157,7 +157,7 @@ def _client(module: Any) -> Any:
     return module.Client(
         timeout=TIMEOUT_SECONDS,
         follow_redirects=False,
-        headers={"user-agent": "auto-eval/0.1 (+ground-truth identifier)"},
+        headers={"user-agent": "closed-bench/0.1 (+ground-truth identifier)"},
     )
 
 

@@ -1,4 +1,4 @@
-"""Command line entry point: `auto-eval`."""
+"""Command line entry point: `closed-bench`."""
 
 from __future__ import annotations
 
@@ -396,7 +396,7 @@ def _cmd_run(args: argparse.Namespace) -> int:
         (target / "run.md").write_text(document + "\n", encoding="utf-8")
         print(f"\nWrote {target}", file=sys.stderr)
         print(
-            "See it in the dashboard: `auto-eval serve`, then open /dashboard",
+            "See it in the dashboard: `closed-bench serve`, then open /dashboard",
             file=sys.stderr,
         )
     return EXIT_OK
@@ -408,7 +408,7 @@ def _cmd_runs(args: argparse.Namespace) -> int:
     if not entries:
         print(
             f"No runs under {args.dir or get_settings().effective_runs_dir}. "
-            "Run a suite with `auto-eval run SUITE`.",
+            "Run a suite with `closed-bench run SUITE`.",
             file=sys.stderr,
         )
         return EXIT_OK
@@ -588,7 +588,7 @@ def _cmd_boards(args: argparse.Namespace) -> int:
     if not entries:
         print(
             f"No boards under {args.dir or 'boards'}. Run one with "
-            "`auto-eval board DATASET --cohort COHORT`.",
+            "`closed-bench board DATASET --cohort COHORT`.",
             file=sys.stderr,
         )
         return EXIT_OK
@@ -653,7 +653,7 @@ def _add_extraction_flags(parser: argparse.ArgumentParser) -> None:
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        prog="auto-eval",
+        prog="closed-bench",
         description="Classify a free-form evaluation request into a task spec.",
     )
     sub = parser.add_subparsers(dest="command", required=True)
@@ -671,7 +671,7 @@ def build_parser() -> argparse.ArgumentParser:
     classify_cmd.add_argument(
         "--model",
         default=None,
-        help=f"Model to classify with. Defaults to AUTO_EVAL_MODEL, else {DEFAULT_MODEL}.",
+        help=f"Model to classify with. Defaults to CLOSED_BENCH_MODEL, else {DEFAULT_MODEL}.",
     )
     classify_cmd.add_argument(
         "--max-tokens", type=int, default=DEFAULT_MAX_TOKENS, help="Output token cap."
@@ -720,7 +720,7 @@ def build_parser() -> argparse.ArgumentParser:
     gt_cmd.add_argument(
         "--model",
         default=None,
-        help="Model to search with. Defaults to AUTO_EVAL_SEARCH_MODEL, else AUTO_EVAL_MODEL.",
+        help="Model to search with. Defaults to CLOSED_BENCH_SEARCH_MODEL, else CLOSED_BENCH_MODEL.",
     )
     gt_cmd.add_argument(
         "--max-tokens", type=int, default=DEFAULT_MAX_TOKENS, help="Output token cap."
@@ -851,12 +851,12 @@ def build_parser() -> argparse.ArgumentParser:
     run_cmd.add_argument(
         "--model",
         default=None,
-        help="The model under test. Defaults to AUTO_EVAL_SUBJECT_MODEL.",
+        help="The model under test. Defaults to CLOSED_BENCH_SUBJECT_MODEL.",
     )
     run_cmd.add_argument(
         "--judge-model",
         default=None,
-        help="Model that rules on the rubrics. Defaults to AUTO_EVAL_JUDGE_MODEL.",
+        help="Model that rules on the rubrics. Defaults to CLOSED_BENCH_JUDGE_MODEL.",
     )
     run_cmd.add_argument(
         "--no-judge",
@@ -916,7 +916,7 @@ def build_parser() -> argparse.ArgumentParser:
     runs_cmd.add_argument(
         "--dir",
         metavar="PATH",
-        help="Where the runs are. Defaults to AUTO_EVAL_RUNS_DIR.",
+        help="Where the runs are. Defaults to CLOSED_BENCH_RUNS_DIR.",
     )
     runs_cmd.add_argument(
         "--format", choices=["text", "json"], default="text", help="Stdout format."

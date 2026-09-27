@@ -28,14 +28,14 @@ pip install -e ".[dev,web]"
 cp .env.example .env
 ```
 
-Put your key in `.env` as `OPENAI_API_KEY`. It's gitignored. `AUTO_EVAL_MODEL`
-and `AUTO_EVAL_BASE_URL` are optional overrides; an exported variable beats the
+Put your key in `.env` as `OPENAI_API_KEY`. It's gitignored. `CLOSED_BENCH_MODEL`
+and `CLOSED_BENCH_BASE_URL` are optional overrides; an exported variable beats the
 file.
 
 ## Run
 
 ```bash
-auto-eval serve
+closed-bench serve
 ```
 
 The UI at <http://127.0.0.1:8000> is the quickest way to try it — paste a
@@ -48,17 +48,17 @@ harness, not a deployment target.
 From the command line:
 
 ```bash
-auto-eval classify -f examples/request.txt --md task.md --json task.json
+closed-bench classify -f examples/request.txt --md task.md --json task.json
 ```
 
 `classify` exits `0` when the spec is usable and `2` when it has a blocking
-question, so a pipeline can gate on it. `auto-eval models` lists what your key
-can reach; `auto-eval schema` prints the `TaskSpec` JSON schema.
+question, so a pipeline can gate on it. `closed-bench models` lists what your key
+can reach; `closed-bench schema` prints the `TaskSpec` JSON schema.
 
 From Python:
 
 ```python
-from auto_eval import classify, render_markdown
+from closed_bench import classify, render_markdown
 
 spec = classify("our summarizer is too verbose and sometimes invents dates")
 print(spec.readiness, [q.question for q in spec.open_questions])
@@ -102,15 +102,15 @@ classified, not obeyed.
 
 | Path | What's in it |
 | --- | --- |
-| [schema.py](../auto_eval/schema.py) | `TaskSpec` — the contract everything downstream reads. |
-| [prompts.py](../auto_eval/prompts.py) | The extraction system prompt. |
-| [classifier.py](../auto_eval/classifier.py) | The API call, error mapping, input limits. |
-| [derive.py](../auto_eval/derive.py) | Fills the holes the spec implies, before any question is asked. |
-| [benchmarks.py](../auto_eval/benchmarks.py) | Ten real public benchmarks, matched onto a spec offline. |
-| [gaps.py](../auto_eval/gaps.py) | Rule-based gap analysis and the readiness verdict. |
-| [render.py](../auto_eval/render.py) | `TaskSpec` → task document. |
-| [config.py](../auto_eval/config.py) | `.env` loading and provider settings. |
-| [cli.py](../auto_eval/cli.py) · [web.py](../auto_eval/web.py) | The `auto-eval` command and the web UI. |
+| [schema.py](../closed_bench/schema.py) | `TaskSpec` — the contract everything downstream reads. |
+| [prompts.py](../closed_bench/prompts.py) | The extraction system prompt. |
+| [classifier.py](../closed_bench/classifier.py) | The API call, error mapping, input limits. |
+| [derive.py](../closed_bench/derive.py) | Fills the holes the spec implies, before any question is asked. |
+| [benchmarks.py](../closed_bench/benchmarks.py) | Ten real public benchmarks, matched onto a spec offline. |
+| [gaps.py](../closed_bench/gaps.py) | Rule-based gap analysis and the readiness verdict. |
+| [render.py](../closed_bench/render.py) | `TaskSpec` → task document. |
+| [config.py](../closed_bench/config.py) | `.env` loading and provider settings. |
+| [cli.py](../closed_bench/cli.py) · [web.py](../closed_bench/web.py) | The `closed-bench` command and the web UI. |
 
 ## Tests
 

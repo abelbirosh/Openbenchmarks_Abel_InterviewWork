@@ -2,9 +2,9 @@ import types
 
 import pytest
 
-from auto_eval.classifier import MAX_INPUT_CHARS, ClassifierError, classify
-from auto_eval.config import DEFAULT_MODEL
-from auto_eval.schema import Answer, Readiness
+from closed_bench.classifier import MAX_INPUT_CHARS, ClassifierError, classify
+from closed_bench.config import DEFAULT_MODEL
+from closed_bench.schema import Answer, Readiness
 
 
 class FakeCompletions:
@@ -136,7 +136,7 @@ def test_model_override_is_passed_through(full_spec):
 
 
 def test_env_model_is_used_when_no_override(full_spec, monkeypatch):
-    monkeypatch.setenv("AUTO_EVAL_MODEL", "gpt-4o-mini")
+    monkeypatch.setenv("CLOSED_BENCH_MODEL", "gpt-4o-mini")
     client = FakeClient(full_spec)
     classify("anything", client=client)
     assert client.completions.call["model"] == "gpt-4o-mini"

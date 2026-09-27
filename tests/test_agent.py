@@ -1,4 +1,4 @@
-from auto_eval.agent import (
+from closed_bench.agent import (
     DEFAULT_MAX_SECONDS,
     DEFAULT_MAX_STEPS,
     AgentProfile,
@@ -8,8 +8,8 @@ from auto_eval.agent import (
     agent_gate,
     profile,
 )
-from auto_eval.gaps import analyze
-from auto_eval.schema import (
+from closed_bench.gaps import analyze
+from closed_bench.schema import (
     KPI,
     Direction,
     EvidenceItem,

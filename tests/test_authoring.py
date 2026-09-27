@@ -1,5 +1,5 @@
-from auto_eval.agent import profile
-from auto_eval.authoring import (
+from closed_bench.agent import profile
+from closed_bench.authoring import (
     MAX_SYNTHETIC_SHARE,
     CaseSource,
     FixtureKind,
@@ -11,16 +11,16 @@ from auto_eval.authoring import (
     needs_fixture,
     synthetic_share,
 )
-from auto_eval.gaps import analyze
-from auto_eval.schema import (
+from closed_bench.gaps import analyze
+from closed_bench.schema import (
     EvalType,
     EvidenceItem,
     EvidenceKind,
     EvidenceStatus,
     SubjectKind,
 )
-from auto_eval.surface import surface
-from auto_eval.verify import VerifierKind
+from closed_bench.surface import surface
+from closed_bench.verify import VerifierKind
 
 
 def build(spec, per_cell=5):

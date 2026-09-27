@@ -1,6 +1,6 @@
-from auto_eval.derive import default_kpi, derive
-from auto_eval.gaps import analyze
-from auto_eval.schema import (
+from closed_bench.derive import default_kpi, derive
+from closed_bench.gaps import analyze
+from closed_bench.schema import (
     KPI,
     Direction,
     EvalType,
@@ -103,7 +103,7 @@ def test_a_derived_spec_is_not_blocked(sparse_spec):
 
 
 def test_the_model_cannot_declare_its_own_question_blocking(sparse_spec):
-    from auto_eval.schema import Question
+    from closed_bench.schema import Question
 
     sparse_spec.open_questions = [
         Question(

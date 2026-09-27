@@ -1,6 +1,6 @@
-from auto_eval.gaps import analyze
-from auto_eval.render import render_markdown, render_questions
-from auto_eval.schema import Readiness
+from closed_bench.gaps import analyze
+from closed_bench.render import render_markdown, render_questions
+from closed_bench.schema import Readiness
 
 
 def test_full_spec_renders_every_section(full_spec):
@@ -54,7 +54,7 @@ def test_unit_is_not_concatenated_onto_a_target_that_already_carries_it(full_spe
 
 
 def test_ground_truth_report_renders_sources_and_verdict(full_spec):
-    from auto_eval.ground_truth import (
+    from closed_bench.ground_truth import (
         Access,
         BaselineValue,
         ExternalSource,
@@ -63,7 +63,7 @@ def test_ground_truth_report_renders_sources_and_verdict(full_spec):
         SourceKind,
         assess,
     )
-    from auto_eval.render import render_ground_truth
+    from closed_bench.render import render_ground_truth
 
     report = assess(
         full_spec,
@@ -99,7 +99,7 @@ def test_ground_truth_report_renders_sources_and_verdict(full_spec):
 
 
 def test_a_self_reported_source_says_so_on_its_face(full_spec):
-    from auto_eval.ground_truth import (
+    from closed_bench.ground_truth import (
         Access,
         ExternalSource,
         Fit,
@@ -107,7 +107,7 @@ def test_a_self_reported_source_says_so_on_its_face(full_spec):
         SourceKind,
         assess,
     )
-    from auto_eval.render import render_ground_truth
+    from closed_bench.render import render_ground_truth
 
     spec = full_spec.model_copy(
         update={"summary": "Compare Apollo and Clearbit on field accuracy."}
@@ -135,8 +135,8 @@ def test_a_self_reported_source_says_so_on_its_face(full_spec):
 
 
 def test_an_empty_report_says_so_rather_than_rendering_blank(sparse_spec):
-    from auto_eval.ground_truth import SourceFindings, assess
-    from auto_eval.render import render_ground_truth
+    from closed_bench.ground_truth import SourceFindings, assess
+    from closed_bench.render import render_ground_truth
 
     md = render_ground_truth(assess(sparse_spec, SourceFindings(recommendation="")))
     assert "_Nothing found online for this task._" in md
@@ -145,7 +145,7 @@ def test_an_empty_report_says_so_rather_than_rendering_blank(sparse_spec):
 
 
 def _analysis():
-    from auto_eval.analysis import (
+    from closed_bench.analysis import (
         AnalysisReport,
         CitedBaseline,
         DownloadPlan,
@@ -154,8 +154,8 @@ def _analysis():
         ResourceAnalysis,
         Usability,
     )
-    from auto_eval.fetch import DatasetMeta, Split
-    from auto_eval.ground_truth import SourceKind
+    from closed_bench.fetch import DatasetMeta, Split
+    from closed_bench.ground_truth import SourceKind
 
     return AnalysisReport(
         subject="invoice extractor",
@@ -220,7 +220,7 @@ def _analysis():
 
 
 def test_analysis_renders_the_plan_the_dataset_and_the_failures():
-    from auto_eval.render import render_analysis
+    from closed_bench.render import render_analysis
 
     md = render_analysis(_analysis())
     assert "# Source analysis for invoice extractor" in md
@@ -236,7 +236,7 @@ def test_analysis_renders_the_plan_the_dataset_and_the_failures():
 
 
 def test_a_long_quote_is_previewed_in_the_document_not_dumped():
-    from auto_eval.render import PREVIEW_CHARS, render_analysis
+    from closed_bench.render import PREVIEW_CHARS, render_analysis
 
     analysis = _analysis()
     analysis.resources[2].baselines[0].quote = "y" * (PREVIEW_CHARS + 400)
@@ -246,8 +246,8 @@ def test_a_long_quote_is_previewed_in_the_document_not_dumped():
 
 
 def test_an_empty_analysis_says_there_is_nothing_to_fetch():
-    from auto_eval.analysis import AnalysisReport
-    from auto_eval.render import render_analysis
+    from closed_bench.analysis import AnalysisReport
+    from closed_bench.render import render_analysis
 
     md = render_analysis(AnalysisReport(subject="support bot"))
     assert "_No source offered anything worth fetching._" in md
@@ -257,8 +257,8 @@ def test_an_empty_analysis_says_there_is_nothing_to_fetch():
 
 
 def test_the_profile_document_shows_what_it_would_take_to_run_it(agent_spec):
-    from auto_eval.agent import agent_gate, profile
-    from auto_eval.render import render_profile
+    from closed_bench.agent import agent_gate, profile
+    from closed_bench.render import render_profile
 
     settled = analyze(agent_spec)
     doc = render_profile(profile(settled), agent_gate(settled))
@@ -270,8 +270,8 @@ def test_the_profile_document_shows_what_it_would_take_to_run_it(agent_spec):
 
 
 def test_the_profile_document_prints_what_is_blocking(agent_spec):
-    from auto_eval.agent import agent_gate, profile
-    from auto_eval.render import render_profile
+    from closed_bench.agent import agent_gate, profile
+    from closed_bench.render import render_profile
 
     agent_spec.subject.interface = None
     agent_spec.evidence = []
@@ -282,8 +282,8 @@ def test_the_profile_document_prints_what_is_blocking(agent_spec):
 
 
 def test_the_suite_document_leads_with_what_is_wrong_with_it(agent_spec):
-    from auto_eval.render import render_suite
-    from auto_eval.suite import build
+    from closed_bench.render import render_suite
+    from closed_bench.suite import build
 
     doc = render_suite(build(agent_spec))
     assert "## Read this first" in doc
@@ -300,8 +300,8 @@ def test_the_suite_document_leads_with_what_is_wrong_with_it(agent_spec):
 
 
 def test_the_coverage_grid_renders_as_a_grid(agent_spec):
-    from auto_eval.render import render_suite
-    from auto_eval.suite import build
+    from closed_bench.render import render_suite
+    from closed_bench.suite import build
 
     doc = render_suite(build(agent_spec))
     assert "| Behaviour | capability | safety | regression |" in doc
@@ -309,8 +309,8 @@ def test_the_coverage_grid_renders_as_a_grid(agent_spec):
 
 
 def test_a_case_renders_with_its_checks_and_its_rubric(agent_spec):
-    from auto_eval.render import render_case
-    from auto_eval.suite import build
+    from closed_bench.render import render_case
+    from closed_bench.suite import build
 
     suite = build(agent_spec)
     case = next(c for c in suite.cases if c.family == "safety.prompt_injection")

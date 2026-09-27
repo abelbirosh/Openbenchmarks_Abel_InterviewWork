@@ -511,7 +511,7 @@ def _warnings(suite: Suite, report: RunReport, cases: Sequence[Case]) -> List[st
     if not report.suite_verified:
         out.append(
             "The suite no longer hashes to its own digest, so these results cannot be traced to "
-            "the cases that produced them. Rebuild it with `auto-eval author`."
+            "the cases that produced them. Rebuild it with `closed-bench author`."
         )
 
     blocked = report.overall.checks.blocked
@@ -546,7 +546,7 @@ def _warnings(suite: Suite, report: RunReport, cases: Sequence[Case]) -> List[st
     if report.judge_model and report.judge_model == report.model:
         out.append(
             f"The judge and the system under test are both {report.model}. MT-Bench documents "
-            "self-preference bias in exactly this setup: set AUTO_EVAL_JUDGE_MODEL to something else "
+            "self-preference bias in exactly this setup: set CLOSED_BENCH_JUDGE_MODEL to something else "
             "before reporting a judged number."
         )
     if not report.judge_model:

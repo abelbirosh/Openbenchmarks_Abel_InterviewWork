@@ -3,12 +3,12 @@ from types import SimpleNamespace
 
 import pytest
 
-from auto_eval.board import Board, Row
-from auto_eval.cohort import SystemKind
-from auto_eval.cohort import parse as parse_cohort
-from auto_eval.dataset import parse as parse_dataset
-from auto_eval.fetch import Fetched
-from auto_eval.saturation import (
+from closed_bench.board import Board, Row
+from closed_bench.cohort import SystemKind
+from closed_bench.cohort import parse as parse_cohort
+from closed_bench.dataset import parse as parse_dataset
+from closed_bench.fetch import Fetched
+from closed_bench.saturation import (
     Proposal,
     SaturationError,
     harden_item,
@@ -18,7 +18,7 @@ from auto_eval.saturation import (
     targets,
     write_dataset,
 )
-from auto_eval.score import Verdict
+from closed_bench.score import Verdict
 
 ITEMS = "\n".join(
     [

@@ -9,7 +9,7 @@ honest about the substitution it makes, and the trace records it:
   harness, from the case's own `stubs` where it specified one and from a plain
   "ok" where it did not. That is what makes a suite about refunds runnable
   without a payments account, and it is also why an end-state check has nothing
-  to read - see `auto_eval.grade`, which blocks those rather than guessing.
+  to read - see `closed_bench.grade`, which blocks those rather than guessing.
 * the **ceilings come from the case**, not from this module. A run that is still
   calling tools at the last allowed step is recorded as cut off, which is a
   different outcome from finishing, and the trajectory checks treat it as one.
@@ -18,7 +18,7 @@ honest about the substitution it makes, and the trace records it:
 
 The task is presented as a live task. The model is not told it is being
 evaluated, because a model that knows it is on camera is not the thing we want
-the number to be about; `auto_eval.runner` says so in the report.
+the number to be about; `closed_bench.runner` says so in the report.
 """
 
 from __future__ import annotations
@@ -444,7 +444,7 @@ class MockClient:
 
         The ruling quotes a line it really did find in the transcript it was
         given, because a judge that cannot be caught inventing a quote would
-        make the check in `auto_eval.judge` untestable.
+        make the check in `closed_bench.judge` untestable.
         """
         self.calls += 1
         schema = kwargs["response_format"]

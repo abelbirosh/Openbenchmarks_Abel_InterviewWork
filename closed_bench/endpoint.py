@@ -220,7 +220,7 @@ def call(
     When no client is passed this module opens the address itself, so it checks
     it first - a cohort file pointing at a metadata endpoint is refused rather
     than fetched from inside whatever network this runs on. A caller that brings
-    its own transport has already made that decision; `auto_eval.board` checks
+    its own transport has already made that decision; `closed_bench.board` checks
     each address once per row instead of once per item.
     """
     if client is None:

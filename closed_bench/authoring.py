@@ -936,7 +936,7 @@ def adapted(
     """Cases pointing at a public suite the catalogue matched.
 
     One case per matched benchmark, not one per row of it: the rows are pulled by
-    `auto_eval.analysis`'s fetch plan, and duplicating them here would be
+    `closed_bench.analysis`'s fetch plan, and duplicating them here would be
     inventing data we have not downloaded.
     """
     out: List[Case] = []

@@ -1,6 +1,6 @@
 """The task specification produced by the input classifier.
 
-Everything the rest of Auto_Eval consumes flows through `TaskSpec`. The three
+Everything the rest of Closed_bench consumes flows through `TaskSpec`. The three
 things we need out of a user's free-form request are:
 
 1. the *subject* - what is actually under test,
@@ -9,7 +9,7 @@ things we need out of a user's free-form request are:
 3. the *evidence* - documentation, successful runs, datasets we can anchor on.
 
 Fields the user did not supply stay empty rather than being invented; the gap
-analysis in `auto_eval.gaps` turns those holes into questions.
+analysis in `closed_bench.gaps` turns those holes into questions.
 """
 
 from __future__ import annotations

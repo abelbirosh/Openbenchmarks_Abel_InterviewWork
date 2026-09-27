@@ -16,7 +16,7 @@ methodology holds up; per-case traces matter to them as proof that the headline
 is real, not as their daily work.
 
 Secondary, observed in the codebase rather than confirmed: the engineer who built
-a system and runs Auto-Eval against it before shipping.
+a system and runs Closed_bench against it before shipping.
 
 ## Product Purpose
 
@@ -37,7 +37,7 @@ that produced it.
 
 ## Operating Context
 
-Run locally from a terminal: `auto-eval serve` opens the UI on localhost while the
+Run locally from a terminal: `closed-bench serve` opens the UI on localhost while the
 CLI does the same work. Two surfaces — a classifier front door where the request
 is described and sharpened, and a runs dashboard where suites are executed and
 read. Runs are long enough that the dashboard is left open and returned to.
@@ -57,7 +57,7 @@ The API key lives in a local `.env` and never leaves the machine.
 
 ## Brand Commitments
 
-Name: Auto-Eval. Voice, as established in the README and module docstrings:
+Name: Closed_bench. Voice, as established in the README and module docstrings:
 plain, exact, and willing to say what a number does not prove. Explains the
 reasoning behind a decision rather than asserting it.
 
@@ -68,7 +68,7 @@ dark ground.
 ## Evidence on Hand
 
 Real: the pipeline, the CLI, run reports on disk, the ten-benchmark catalogue in
-`auto_eval/benchmarks.py`. No customers, testimonials, published case studies, or
+`closed_bench/benchmarks.py`. No customers, testimonials, published case studies, or
 pricing exist — future work must not invent them. The example request in the UI is
 illustrative and is labelled as such.
 

@@ -1,8 +1,8 @@
-# Auto-Eval
+# Closed_bench
 
 **Turn a description of what you want tested into a reproducible benchmark.**
 
-Auto-Eval is an open-source system for automatically designing, building, running, and maintaining evaluation suites for software and AI systems.
+Closed_bench is an open-source system for automatically designing, building, running, and maintaining evaluation suites for software and AI systems.
 
 Give it a goal like:
 
@@ -10,7 +10,7 @@ Give it a goal like:
 Compare company enrichment APIs on accuracy, coverage, latency, and cost.
 ```
 
-Auto-Eval turns that into:
+Closed_bench turns that into:
 
 ```text
 Free-form request
@@ -43,7 +43,7 @@ Free-form request
 for company enrichment."
 ```
 
-Auto-Eval can produce:
+Closed_bench can produce:
 
 ```text
 benchmark/
@@ -82,7 +82,7 @@ Specs, suites, cases, scoring rules, and results are versioned and content-addre
 
 ## Running it
 
-Everything after the request is a button. `auto-eval serve` puts the pipeline on
+Everything after the request is a button. `closed-bench serve` puts the pipeline on
 one page: describe what you want tested, answer whatever blocks, find the ground
 truth, then **Run the benchmark** — one click writes the suite for that spec and
 runs every case against the provider, with the scores underneath and a link
@@ -92,12 +92,12 @@ dry run needs no API key.
 The same steps from the command line:
 
 ```bash
-auto-eval classify "..." --json task.json   # request → spec
-auto-eval ground-truth -s task.json         # what already exists publicly
-auto-eval author -s task.json -o suites/x   # the cases and their checks
-auto-eval run suites/x                      # run them; --mock calls no provider
-auto-eval serve                             # the UI, dashboard at /dashboard
-auto-eval fresh --model gpt-5               # ground truth this model cannot have memorised
+closed-bench classify "..." --json task.json   # request → spec
+closed-bench ground-truth -s task.json         # what already exists publicly
+closed-bench author -s task.json -o suites/x   # the cases and their checks
+closed-bench run suites/x                      # run them; --mock calls no provider
+closed-bench serve                             # the UI, dashboard at /dashboard
+closed-bench fresh --model gpt-5               # ground truth this model cannot have memorised
 ```
 
 A run's tools are declared to the model and answered inside the harness, so
@@ -115,9 +115,9 @@ accuracy, answer recall at 1 and 5, latency, errors and spend at the vendor's
 published price.
 
 ```bash
-auto-eval board items.jsonl -c cohort.json    # or "Run the board" on the page
-auto-eval boards
-auto-eval harden items.jsonl -c cohort.json   # when a row reaches 100%
+closed-bench board items.jsonl -c cohort.json    # or "Run the board" on the page
+closed-bench boards
+closed-bench harden items.jsonl -c cohort.json   # when a row reaches 100%
 ```
 
 | System | Endpoint & configuration | Accuracy | AR@1 | AR@5 | p50 | Total $ | $ / 1k correct |
@@ -143,7 +143,7 @@ has the detail.
 
 A row at 100% is the other thing a board can report, and it is a fault in the
 dataset rather than a result: every system at the ceiling is tied and the gaps
-that matter are invisible. `auto-eval harden` closes that loop — it runs the
+that matter are invisible. `closed-bench harden` closes that loop — it runs the
 board, takes the items holding a perfect row up, asks for a harder fact from
 each item's own source document, keeps only the replacements whose answer it can
 find in the page it fetched, and runs the board again.
@@ -154,7 +154,7 @@ A public suite older than the model measures capability and recall at once. Ever
 run report says which of its cases the model could already have seen: cases
 harvested from your own runs or generated from your spec are clean by
 construction, and one adapted from a public suite is only as clean as that
-suite's publication date. `auto-eval fresh` lists the ground truth that resists
+suite's publication date. `closed-bench fresh` lists the ground truth that resists
 the problem — suites refreshed on a schedule, suites whose answers were never
 published — judged against a model's published cutoff.
 
@@ -162,7 +162,7 @@ published — judged against a model's published cutoff.
 
 Building a serious benchmark currently requires manual research, dataset design, integration work, scoring logic, and reporting.
 
-Auto-Eval aims to reduce that workflow to:
+Closed_bench aims to reduce that workflow to:
 
 ```text
 Describe the evaluation
@@ -171,11 +171,14 @@ Describe the evaluation
 → reproduce the result
 ```
 
-**Auto-Eval is infrastructure for turning evaluation questions into evidence.**
+**Closed_bench is infrastructure for turning evaluation questions into evidence.**
 
 ## License
 
-[Apache 2.0](LICENSE). Use it, modify it, ship it in something commercial — the
-license also grants you a patent license from every contributor, and asks that
-you keep the notice and mark the files you changed. Contributions are accepted
-under the same terms.
+Copyright 2026 Abel Birosh.
+
+Licensed under the [GNU General Public License, version 3 only](LICENSE)
+(`GPL-3.0-only`). You may use, modify, and distribute Closed_bench, including
+commercially. If you distribute modified versions, you must license them under
+GPLv3 and provide the corresponding source code as required by the license.
+Closed_bench comes with no warranty. Contributions are accepted under the same terms.

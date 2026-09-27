@@ -17,7 +17,7 @@ answer count, and they are not the same thing:
 
 Ground truth lets us *score*; a baseline only tells us what good looks like.
 
-As in `auto_eval.gaps`, the model does the finding and nothing else. It
+As in `closed_bench.gaps`, the model does the finding and nothing else. It
 searches and returns sources; `assess()` drops what cannot be checked, works
 out which KPI each surviving source actually covers, and computes the verdict.
 That keeps the verdict deterministic and testable without a network call.

@@ -1,7 +1,7 @@
 """What one run of one case left behind.
 
 A suite says what to test; this is the record of what happened when it was
-tested. It exists as its own artefact because every check in `auto_eval.grade`
+tested. It exists as its own artefact because every check in `closed_bench.grade`
 reads it rather than the provider's response object: a verdict that cannot be
 re-derived from a stored trace is a verdict nobody can audit six months later.
 
@@ -49,7 +49,7 @@ CUT_OFF = frozenset(
     }
 )
 
-# Stub behaviours that hand the agent something broken. `auto_eval.grade` looks
+# Stub behaviours that hand the agent something broken. `closed_bench.grade` looks
 # for one of these before it will claim the run recovered from anything.
 FAILING_BEHAVIOURS = frozenset({"error", "timeout", "empty", "malformed"})
 

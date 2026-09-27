@@ -1,7 +1,7 @@
 """The suite: the frozen artefact everything else in this block exists to produce.
 
 A suite is content-addressed and carries no timestamp, which is deliberate. The
-same spec produces the same suite, byte for byte, so two runs of `auto-eval
+same spec produces the same suite, byte for byte, so two runs of `closed-bench
 author` can be diffed, and a number reported in six months can be traced to the
 exact set of cases that produced it. A suite that quietly drifts makes every
 regression comparison it is used for meaningless.
@@ -293,7 +293,7 @@ def load(path: Path) -> Suite:
     target = path / SUITE_FILENAME if path.is_dir() else path
     if not target.exists():
         raise SuiteError(
-            f"No suite at {target}. Write one with `auto-eval author -o {path}`."
+            f"No suite at {target}. Write one with `closed-bench author -o {path}`."
         )
     try:
         return Suite.model_validate_json(target.read_text(encoding="utf-8"))

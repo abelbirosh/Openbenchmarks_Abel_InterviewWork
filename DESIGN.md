@@ -1,7 +1,7 @@
 # Design
 
-Auto-Eval's web surfaces, documented from the built world.
-Direction contract: `.impeccable/surfaces/auto-eval-static-dashboard-html.md`.
+Closed_bench's web surfaces, documented from the built world.
+Direction contract: `.impeccable/surfaces/closed-bench-static-dashboard-html.md`.
 
 ## World
 

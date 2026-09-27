@@ -4,7 +4,7 @@ A suite assembled case by case is a suite nobody can audit: twelve cases that
 felt worth writing, with no way to say what they cover or what they miss. So
 the coverage is decided first - behaviours down the side, reasons for testing
 across the top - and authoring fills cells. A cell that stays empty is printed
-as a gap, the same way `auto_eval.gaps` prints a question, rather than quietly
+as a gap, the same way `closed_bench.gaps` prints a question, rather than quietly
 not existing.
 
 Two things are deliberately not rows here:
@@ -142,7 +142,7 @@ def _eval_types(spec: TaskSpec) -> List[EvalType]:
     """Columns of the grid: what the user asked for, plus what they handed us.
 
     A spec that carries an incident gets a regression column whether or not it
-    asked for one. The case is going to be written - `auto_eval.authoring`
+    asked for one. The case is going to be written - `closed_bench.authoring`
     harvests every failure it is given - and a case with no cell to land in is a
     case that goes uncounted.
     """

@@ -2,7 +2,7 @@
 
 `TaskSpec` is the contract between the input classifier and everything
 downstream. One free-form request in, one `TaskSpec` out. Print the machine
-readable version with `auto-eval schema`.
+readable version with `closed-bench schema`.
 
 It records the user's goal, workload, comparison and evidence, plus what remains unknown.
 
@@ -37,7 +37,7 @@ coverage row when explicit scope is absent. Representative inputs become
 concrete capability cases with no invented gold answer; other synthetic cases
 receive workload context. Recorded and public case instructions are preserved.
 
-Boards accept the spec with `auto-eval board items.jsonl -c cohort.json -s task.json`;
+Boards accept the spec with `closed-bench board items.jsonl -c cohort.json -s task.json`;
 the web flow passes it automatically. The board stores it and discloses the
 actual execution concurrency separately from the expected production load.
 Datasets still need to be supplied; request-mix weights are not automatically
@@ -112,7 +112,7 @@ words, an optional `location`, and a `status`:
 
 ## Where readiness comes from
 
-The model extracts; it does not decide. `auto_eval.gaps` recomputes
+The model extracts; it does not decide. `closed_bench.gaps` recomputes
 `open_questions` and `readiness` from rules after every classification, and the
 model's own guess is discarded.
 

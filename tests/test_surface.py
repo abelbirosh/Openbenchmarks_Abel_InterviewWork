@@ -1,12 +1,12 @@
-from auto_eval.gaps import analyze
-from auto_eval.schema import (
+from closed_bench.gaps import analyze
+from closed_bench.schema import (
     EvalType,
     EvidenceItem,
     EvidenceKind,
     EvidenceStatus,
     Priority,
 )
-from auto_eval.surface import (
+from closed_bench.surface import (
     CellStatus,
     behaviours_for,
     coverage_ratio,

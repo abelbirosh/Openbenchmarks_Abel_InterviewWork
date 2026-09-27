@@ -1,6 +1,6 @@
 from datetime import date
 
-from auto_eval.contamination import (
+from closed_bench.contamination import (
     CLEAN,
     CUTOFFS,
     FRESH,
@@ -12,7 +12,7 @@ from auto_eval.contamination import (
     parse_cutoff,
     verdict_for,
 )
-from auto_eval.suite import build
+from closed_bench.suite import build
 
 # --- the cutoffs ----------------------------------------------------------
 

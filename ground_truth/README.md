@@ -32,7 +32,7 @@ is being measured, and a search on an unsettled KPI comes back confident and
 wrong. `gate()` is the whole trigger:
 
 ```python
-from auto_eval import classify, gate, identify
+from closed_bench import classify, gate, identify
 
 spec = classify(request)
 if gate(spec).open:
@@ -47,14 +47,14 @@ to override it, and expect noise.
 The whole thing, from a request to a fetch plan on disk:
 
 ```bash
-auto-eval classify -f examples/request.txt --ground-truth --analyze --out-dir data/
+closed-bench classify -f examples/request.txt --ground-truth --analyze --out-dir data/
 ```
 
 Or against a spec written earlier, which is the usual case — you classify, get
 questions, answer them, and only then search:
 
 ```bash
-auto-eval ground-truth -s task.json --analyze --out-dir data/
+closed-bench ground-truth -s task.json --analyze --out-dir data/
 ```
 
 Drop `--analyze` to stop after identification. `--out-dir` writes three files:
@@ -156,8 +156,8 @@ A source whose fit is only contextual is never opened at all.
 
 ## What it is allowed to touch
 
-This stage is the only part of Auto_Eval that opens a URL, and those URLs were
-proposed by a model, so [fetch.py](../auto_eval/fetch.py) refuses rather than
+This stage is the only part of Closed_bench that opens a URL, and those URLs were
+proposed by a model, so [fetch.py](../closed_bench/fetch.py) refuses rather than
 trusts:
 
 - **http(s) only.**
@@ -189,8 +189,8 @@ check cannot.
 
 The search runs through the OpenAI Responses API with the hosted `web_search`
 tool — accounts that only expose `web_search_preview` are retried on that name
-automatically. `AUTO_EVAL_SEARCH_MODEL` sets a stronger model for this block
-alone; unset, it uses `AUTO_EVAL_MODEL`.
+automatically. `CLOSED_BENCH_SEARCH_MODEL` sets a stronger model for this block
+alone; unset, it uses `CLOSED_BENCH_MODEL`.
 
 **The model searches; it does not decide.** As in the classifier, the verdict is
 computed afterwards, in `assess()`, which is a pure function:
@@ -213,12 +213,12 @@ searched on, not obeyed.
 
 | Path | What's in it |
 | --- | --- |
-| [ground_truth.py](../auto_eval/ground_truth.py) | The gate, the report models, the search call, and `assess`. |
-| [analysis.py](../auto_eval/analysis.py) | Dataset and page assessment, the download plan, and the verification that decides what is kept. |
-| [fetch.py](../auto_eval/fetch.py) | Guarded HTTP and the dataset metadata endpoints. |
-| [prompts.py](../auto_eval/prompts.py) | The three prompts: search, dataset assessment, page assessment. |
-| [render.py](../auto_eval/render.py) | `GroundTruthReport` and `AnalysisReport` → documents. |
-| [cli.py](../auto_eval/cli.py) · [web.py](../auto_eval/web.py) | `auto-eval ground-truth` and `POST /api/ground-truth`, `/api/analyze`. |
+| [ground_truth.py](../closed_bench/ground_truth.py) | The gate, the report models, the search call, and `assess`. |
+| [analysis.py](../closed_bench/analysis.py) | Dataset and page assessment, the download plan, and the verification that decides what is kept. |
+| [fetch.py](../closed_bench/fetch.py) | Guarded HTTP and the dataset metadata endpoints. |
+| [prompts.py](../closed_bench/prompts.py) | The three prompts: search, dataset assessment, page assessment. |
+| [render.py](../closed_bench/render.py) | `GroundTruthReport` and `AnalysisReport` → documents. |
+| [cli.py](../closed_bench/cli.py) · [web.py](../closed_bench/web.py) | `closed-bench ground-truth` and `POST /api/ground-truth`, `/api/analyze`. |
 
 ## Tests
 
@@ -246,7 +246,7 @@ The search is told to prefer ground truth that resists this — suites refreshed
 on a schedule, suites whose answers were never published, anything released
 after the model stopped training — and to report the older standard suite as
 well where it fits, saying which is which.
-[`auto_eval/contamination.py`](../auto_eval/contamination.py) is the
+[`closed_bench/contamination.py`](../closed_bench/contamination.py) is the
 deterministic counterpart: published cutoffs with the page each was read from,
-and a small catalogue of contamination-resistant suites, printed by `auto-eval
+and a small catalogue of contamination-resistant suites, printed by `closed-bench
 fresh --model <model>`.

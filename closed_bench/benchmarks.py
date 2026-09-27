@@ -1,6 +1,6 @@
 """A small catalogue of real, public benchmarks, and a matcher onto a spec.
 
-`auto_eval.ground_truth` asks a model to search the web, which is the right way
+`closed_bench.ground_truth` asks a model to search the web, which is the right way
 to find something specific to a task and the wrong way to answer "is there a
 standard suite for this?". The model can misremember a name, a URL, or a number.
 This module is the deterministic half: ten benchmarks that actually exist, each
@@ -17,7 +17,7 @@ What is deliberately not here:
 
 - **Numbers.** No leaderboard scores, no "GPT-4 gets X". Those go stale in weeks
   and a wrong one is worse than none, so `baselines` is left empty and
-  `auto_eval.analysis` fills it by opening the page and quoting it.
+  `closed_bench.analysis` fills it by opening the page and quoting it.
 - **Latency and cost.** There is no public benchmark worth citing: both are
   properties of your deployment, not of a model, so measure them yourself.
 
@@ -474,7 +474,7 @@ def as_sources(matches: Sequence[BenchmarkMatch]) -> List[ExternalSource]:
     """Turn matches into the source type the ground-truth report already reads.
 
     That way a curated hit renders, and is opened and checked by
-    `auto_eval.analysis`, exactly like one the model found by searching.
+    `closed_bench.analysis`, exactly like one the model found by searching.
     `baselines` stays empty on purpose - see this module's docstring.
     """
     return [

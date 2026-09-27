@@ -1,7 +1,7 @@
 """OpenAI-backed classifier: free-form request in, TaskSpec out.
 
 The model does extraction only. Deciding what is *missing* - and therefore
-whether the spec is usable - is `auto_eval.gaps`, so that verdict stays
+whether the spec is usable - is `closed_bench.gaps`, so that verdict stays
 deterministic and testable without a network call.
 """
 
@@ -15,7 +15,7 @@ from .prompts import SYSTEM_PROMPT, build_user_message
 from .schema import Answer, TaskSpec
 
 # Extraction on a short input, run on every request, so it goes to the cheap
-# tier. Raise it with --model or AUTO_EVAL_MODEL if specs come back thin.
+# tier. Raise it with --model or CLOSED_BENCH_MODEL if specs come back thin.
 DEFAULT_MAX_TOKENS = 16000
 
 # A request longer than this is almost certainly a pasted log or dump; we refuse
@@ -117,8 +117,8 @@ def _as_classifier_error(exc: Exception, settings: Settings) -> ClassifierError:
     if isinstance(exc, openai.NotFoundError):
         return ClassifierError(
             f"Model {settings.model!r} is not available to this account. "
-            "Set AUTO_EVAL_MODEL in your .env to one that is - "
-            "`auto-eval models` lists what your key can reach."
+            "Set CLOSED_BENCH_MODEL in your .env to one that is - "
+            "`closed-bench models` lists what your key can reach."
         )
     if isinstance(exc, openai.AuthenticationError):
         return ClassifierError(
@@ -127,7 +127,7 @@ def _as_classifier_error(exc: Exception, settings: Settings) -> ClassifierError:
     if isinstance(exc, openai.PermissionDeniedError):
         return ClassifierError(
             f"This key is not permitted to use {settings.model!r}. "
-            "Set AUTO_EVAL_MODEL to a model your plan includes."
+            "Set CLOSED_BENCH_MODEL to a model your plan includes."
         )
     if isinstance(exc, openai.RateLimitError):
         return ClassifierError(
@@ -144,7 +144,7 @@ def _as_classifier_error(exc: Exception, settings: Settings) -> ClassifierError:
 
 
 def list_models(client: Optional[Any] = None) -> list:
-    """Model IDs this key can reach, so a bad AUTO_EVAL_MODEL is easy to fix."""
+    """Model IDs this key can reach, so a bad CLOSED_BENCH_MODEL is easy to fix."""
     settings = get_settings()
     client = client or _build_client(settings)
     try:

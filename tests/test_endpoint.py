@@ -1,5 +1,5 @@
-from auto_eval.cohort import Endpoint
-from auto_eval.endpoint import Hit, call, dig, parse_hits
+from closed_bench.cohort import Endpoint
+from closed_bench.endpoint import Hit, call, dig, parse_hits
 
 
 class _Obj:

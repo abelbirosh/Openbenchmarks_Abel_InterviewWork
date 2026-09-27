@@ -1,7 +1,7 @@
 # Examples
 
 Starting points, not results. Copy them, change the names, and point
-`auto-eval board` at your own.
+`closed-bench board` at your own.
 
 | File | What it is |
 | --- | --- |
@@ -11,7 +11,7 @@ Starting points, not results. Copy them, change the names, and point
 | [`dataset-hard-lookup.jsonl`](dataset-hard-lookup.jsonl) | Fifty questions built to be hard for a single query: every answer sits inside a document rather than a headline — a table cell, a caption, a mid-section clause — with a near-identical competing number or name beside it. They are drawn from thirty-two sources published between October 2024 and July 2026, and every answer was checked against the text fetched from the URL in its row before the row was kept. |
 | [`dataset-benchmark-facts.jsonl`](dataset-benchmark-facts.jsonl) | Five facts about AI benchmarks, each published in 2025 — after the cutoff of the models this project defaults to, which is what makes the model-only row score zero. |
 | [`dataset-company-news.jsonl`](dataset-company-news.jsonl) | The shape to copy for your own items. The rows are placeholders; replace them with facts you can check. |
-| [`request.txt`](request.txt) | A free-form request, for `auto-eval classify -f`. |
+| [`request.txt`](request.txt) | A free-form request, for `closed-bench classify -f`. |
 
 The prices in the cohort files are the published list prices at the time they
 were written and they move. Check the vendor's pricing page before quoting a

@@ -1,5 +1,5 @@
-from auto_eval.gaps import analyze, merge_questions, readiness_for, rule_questions
-from auto_eval.schema import (
+from closed_bench.gaps import analyze, merge_questions, readiness_for, rule_questions
+from closed_bench.schema import (
     EvidenceItem,
     EvidenceKind,
     EvidenceStatus,

@@ -1,13 +1,13 @@
 ---
 version: 1
-slug: "auto-eval-static-dashboard-html"
-primary_target: "auto_eval/static/dashboard.html"
-related_targets: ["auto_eval/static/index.html"]
+slug: "closed-bench-static-dashboard-html"
+primary_target: "closed_bench/static/dashboard.html"
+related_targets: ["closed_bench/static/index.html"]
 ---
 
-# Surface brief — Auto-Eval web UI
+# Surface brief — Closed_bench web UI
 
-Scope: `auto_eval/static/dashboard.html` (runs) and `auto_eval/static/index.html`
+Scope: `closed_bench/static/dashboard.html` (runs) and `closed_bench/static/index.html`
 (classifier). Visitor mode: **Operate**.
 
 Audience and job: someone choosing between providers who needs a defensible

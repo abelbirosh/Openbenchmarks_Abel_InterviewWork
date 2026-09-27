@@ -305,7 +305,7 @@ def verifiers_for_kpi(
                 rubric=_rubric_for(kpi),
             )
         ]
-    # LLM_JUDGE, and UNKNOWN - which `auto_eval.gaps` is already asking about, and
+    # LLM_JUDGE, and UNKNOWN - which `closed_bench.gaps` is already asking about, and
     # which falls here rather than silently producing no check at all.
     return [
         Verifier(

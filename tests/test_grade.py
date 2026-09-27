@@ -1,6 +1,6 @@
-from auto_eval.agent import Budget
-from auto_eval.authoring import Case, CaseSource, Fixture, FixtureKind
-from auto_eval.grade import (
+from closed_bench.agent import Budget
+from closed_bench.authoring import Case, CaseSource, Fixture, FixtureKind
+from closed_bench.grade import (
     BY_CONSTRUCTION,
     NEEDS_PERSON,
     NO_ENVIRONMENT,
@@ -10,9 +10,9 @@ from auto_eval.grade import (
     grade,
     runnable,
 )
-from auto_eval.schema import EvalType
-from auto_eval.trace import Step, StopReason, ToolCall, Trace, Usage
-from auto_eval.verify import Outcome, Reads, Verifier, VerifierKind
+from closed_bench.schema import EvalType
+from closed_bench.trace import Step, StopReason, ToolCall, Trace, Usage
+from closed_bench.verify import Outcome, Reads, Verifier, VerifierKind
 
 
 def case(*verifiers, **kwargs) -> Case:

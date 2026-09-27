@@ -5,9 +5,9 @@ question — **which of these systems is better at this job** — and the differ
 question changes the shape of everything else.
 
 ```bash
-auto-eval board examples/dataset-benchmark-facts.jsonl -c examples/cohort-web-search.json
-auto-eval boards                       # what has been run
-auto-eval serve                        # or click "Run the board" on the page
+closed-bench board examples/dataset-benchmark-facts.jsonl -c examples/cohort-web-search.json
+closed-bench boards                       # what has been run
+closed-bench serve                        # or click "Run the board" on the page
 ```
 
 Rows whose key is not in the environment are reported as not run, so the same
@@ -41,7 +41,7 @@ training cutoff it should score near zero — and when it does, every other row 
 the board is measuring retrieval rather than recall. When it does not, the board
 says so at the top and the number to fix is the dataset, not the vendor.
 
-This is the same argument [`contamination.py`](../auto_eval/contamination.py)
+This is the same argument [`contamination.py`](../closed_bench/contamination.py)
 makes about public suites, run as an experiment instead of an inference: rather
 than reasoning about what the model might have seen, ask it.
 
@@ -137,7 +137,7 @@ reading is not *this vendor is perfect* but *these items ran out of difficulty*.
 The number to fix is the dataset, so there is a loop for it:
 
 ```bash
-auto-eval harden examples/dataset-hard-lookup.jsonl \
+closed-bench harden examples/dataset-hard-lookup.jsonl \
   -c examples/cohort-web-search.json \
   --rounds 2 --dataset-out examples/dataset-hard-lookup-hardened.jsonl
 ```

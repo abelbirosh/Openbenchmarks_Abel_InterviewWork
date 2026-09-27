@@ -1,6 +1,6 @@
 import pytest
 
-from auto_eval.cohort import (
+from closed_bench.cohort import (
     Cohort,
     CohortError,
     Endpoint,

@@ -5,11 +5,11 @@ requires = ["setuptools>=77"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "auto-eval"
+name = "closed-bench"
 version = "0.1.0"
 description = "Turn a free-form request into a structured evaluation task spec."
 readme = "README.md"
-license = "Apache-2.0"
+license = "GPL-3.0-only"
 license-files = ["LICENSE"]
 requires-python = ">=3.10"
 dependencies = [
@@ -24,13 +24,13 @@ dev = ["pytest>=9.1.1", "ruff>=0.6", "mypy>=1.11"]
 web = ["fastapi>=0.110", "uvicorn>=0.27"]
 
 [project.scripts]
-auto-eval = "auto_eval.cli:main"
+closed-bench = "closed_bench.cli:main"
 
 [tool.setuptools.packages.find]
-include = ["auto_eval*"]
+include = ["closed_bench*"]
 
 [tool.setuptools.package-data]
-auto_eval = ["static/*.html"]
+closed_bench = ["static/*.html"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
@@ -68,11 +68,11 @@ ignore = [
 "tests/*" = ["C408"]
 
 [tool.ruff.lint.isort]
-known-first-party = ["auto_eval"]
+known-first-party = ["closed_bench"]
 
 [tool.mypy]
 python_version = "3.10"
-files = ["auto_eval"]
+files = ["closed_bench"]
 check_untyped_defs = true
 disallow_incomplete_defs = true
 no_implicit_optional = true

@@ -403,7 +403,7 @@ def for_suite(
     """Assess the cases in `suite` against what `model` may already have seen.
 
     Takes the suite structurally rather than by import, so this module stays
-    below `auto_eval.suite` and can be used on a report loaded from disk.
+    below `closed_bench.suite` and can be used on a report loaded from disk.
     """
     resolved = cutoff or cutoff_for(model)
     report = ContaminationReport(

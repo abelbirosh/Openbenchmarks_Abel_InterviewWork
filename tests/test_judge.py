@@ -1,9 +1,9 @@
-from auto_eval.agent import Budget
-from auto_eval.authoring import Case, CaseSource, Fixture, FixtureKind
-from auto_eval.judge import Ruling, build_message, judge_with, quoted_from, rule
-from auto_eval.schema import EvalType
-from auto_eval.trace import Step, Trace, Usage
-from auto_eval.verify import Reads, Verifier, VerifierKind
+from closed_bench.agent import Budget
+from closed_bench.authoring import Case, CaseSource, Fixture, FixtureKind
+from closed_bench.judge import Ruling, build_message, judge_with, quoted_from, rule
+from closed_bench.schema import EvalType
+from closed_bench.trace import Step, Trace, Usage
+from closed_bench.verify import Reads, Verifier, VerifierKind
 
 CASE = Case(
     id="c1",

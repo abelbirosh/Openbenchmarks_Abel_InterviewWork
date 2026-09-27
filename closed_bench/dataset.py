@@ -9,7 +9,7 @@ Two fields carry more weight than they look:
 
 * `published` - when the fact became true. A board over facts that predate the
   model's training cutoff measures memory as much as retrieval, which is why
-  `auto_eval.contamination` reads this field and why the board reports a
+  `closed_bench.contamination` reads this field and why the board reports a
   model-only baseline next to every other row.
 * `answers` - *every* wording that counts. A scorer that only accepts one
   spelling of a right answer manufactures a difference between systems that

@@ -288,7 +288,7 @@ def launch(
             _set(job.job_id, state="failed", error=str(exc))
 
     threading.Thread(
-        target=work, name=f"auto-eval-run-{job.job_id}", daemon=True
+        target=work, name=f"closed-bench-run-{job.job_id}", daemon=True
     ).start()
     return job
 
@@ -362,7 +362,7 @@ def launch_board(
             _set(job.job_id, state="failed", error=str(exc))
 
     threading.Thread(
-        target=work, name=f"auto-eval-board-{job.job_id}", daemon=True
+        target=work, name=f"closed-bench-board-{job.job_id}", daemon=True
     ).start()
     return job
 
@@ -408,7 +408,7 @@ def create_app():
             'The web UI needs FastAPI. Install it with `pip install -e ".[web]"`.'
         ) from exc
 
-    app = FastAPI(title="Auto_Eval", docs_url="/api/docs")
+    app = FastAPI(title="Closed_bench", docs_url="/api/docs")
 
     @app.get("/", include_in_schema=False)
     def index():
@@ -650,7 +650,7 @@ def create_app():
         """Look at each identified source and say what to fetch from it later.
 
         This is the one endpoint that opens URLs the model proposed. It reads
-        metadata and pages only - nothing is downloaded - and `auto_eval.fetch`
+        metadata and pages only - nothing is downloaded - and `closed_bench.fetch`
         refuses any address that is not public.
         """
         try:
@@ -674,7 +674,7 @@ def serve(host: str = "127.0.0.1", port: int = 8000, reload: bool = False) -> No
         ) from exc
 
     settings = get_settings()
-    print(f"Auto_Eval UI on http://{host}:{port}  (model: {settings.model})")
+    print(f"Closed_bench UI on http://{host}:{port}  (model: {settings.model})")
     print(
         f"  dashboard: http://{host}:{port}/dashboard  "
         f"(runs in {settings.effective_runs_dir}, under test: {settings.effective_subject_model})"
@@ -686,7 +686,11 @@ def serve(host: str = "127.0.0.1", port: int = 8000, reload: bool = False) -> No
 
     if reload:
         uvicorn.run(
-            "auto_eval.web:create_app", host=host, port=port, reload=True, factory=True
+            "closed_bench.web:create_app",
+            host=host,
+            port=port,
+            reload=True,
+            factory=True,
         )
     else:
         uvicorn.run(create_app(), host=host, port=port)

@@ -2,7 +2,7 @@ import json
 
 import pytest
 
-from auto_eval.cli import EXIT_OK, build_parser, main
+from closed_bench.cli import EXIT_OK, build_parser, main
 
 
 def test_schema_command_emits_valid_json_schema(capsys):
@@ -24,7 +24,7 @@ def test_schema_command_writes_to_file(tmp_path, capsys):
 def test_classify_parser_defaults():
     args = build_parser().parse_args(["classify", "test", "my", "bot"])
     assert args.text == ["test", "my", "bot"]
-    assert args.model is None  # so AUTO_EVAL_MODEL can supply it
+    assert args.model is None  # so CLOSED_BENCH_MODEL can supply it
     assert args.format == "markdown"
 
 
@@ -49,9 +49,9 @@ def test_ground_truth_parser_takes_a_spec_or_text():
 def test_ground_truth_exits_two_without_searching_when_something_blocks(
     tmp_path, subjectless_spec, capsys, monkeypatch
 ):
-    from auto_eval import cli
-    from auto_eval.cli import EXIT_INSUFFICIENT
-    from auto_eval.gaps import analyze
+    from closed_bench import cli
+    from closed_bench.cli import EXIT_INSUFFICIENT
+    from closed_bench.gaps import analyze
 
     spec_file = tmp_path / "spec.json"
     spec_file.write_text(analyze(subjectless_spec).model_dump_json())
@@ -67,9 +67,9 @@ def test_ground_truth_exits_two_without_searching_when_something_blocks(
 def test_ground_truth_reads_a_spec_file_and_prints_the_report(
     tmp_path, full_spec, capsys, monkeypatch
 ):
-    from auto_eval import cli
-    from auto_eval.gaps import analyze
-    from auto_eval.ground_truth import SourceFindings, assess
+    from closed_bench import cli
+    from closed_bench.gaps import analyze
+    from closed_bench.ground_truth import SourceFindings, assess
 
     spec_file = tmp_path / "spec.json"
     spec_file.write_text(analyze(full_spec).model_dump_json())
@@ -94,16 +94,16 @@ def test_analyze_flags_are_parsed():
 def test_the_analysis_is_written_where_a_later_step_can_pick_it_up(
     tmp_path, full_spec, capsys, monkeypatch
 ):
-    from auto_eval import cli
-    from auto_eval.analysis import (
+    from closed_bench import cli
+    from closed_bench.analysis import (
         AnalysisReport,
         DownloadPlan,
         Reachability,
         ResourceAnalysis,
         Usability,
     )
-    from auto_eval.gaps import analyze
-    from auto_eval.ground_truth import SourceFindings, SourceKind, assess
+    from closed_bench.gaps import analyze
+    from closed_bench.ground_truth import SourceFindings, SourceKind, assess
 
     spec_file = tmp_path / "spec.json"
     spec_file.write_text(analyze(full_spec).model_dump_json())
@@ -165,9 +165,9 @@ def test_the_analysis_is_written_where_a_later_step_can_pick_it_up(
 def test_force_reaches_the_search_so_the_gate_does_not_refuse_twice(
     tmp_path, sparse_spec, monkeypatch, capsys
 ):
-    from auto_eval import cli
-    from auto_eval.gaps import analyze
-    from auto_eval.ground_truth import SourceFindings, assess
+    from closed_bench import cli
+    from closed_bench.gaps import analyze
+    from closed_bench.ground_truth import SourceFindings, assess
 
     spec_file = tmp_path / "spec.json"
     spec_file.write_text(analyze(sparse_spec).model_dump_json())
@@ -194,7 +194,7 @@ def test_benchmarks_with_no_input_prints_the_catalogue(capsys):
 
 
 def test_benchmarks_matches_a_spec_from_disk(tmp_path, full_spec, capsys):
-    from auto_eval.gaps import analyze
+    from closed_bench.gaps import analyze
 
     spec_file = tmp_path / "spec.json"
     spec_file.write_text(analyze(full_spec).model_dump_json())
@@ -208,7 +208,7 @@ def test_benchmarks_matches_a_spec_from_disk(tmp_path, full_spec, capsys):
 def test_benchmarks_json_output_is_machine_readable(tmp_path, full_spec, capsys):
     import json as _json
 
-    from auto_eval.gaps import analyze
+    from closed_bench.gaps import analyze
 
     spec_file = tmp_path / "spec.json"
     spec_file.write_text(analyze(full_spec).model_dump_json())
@@ -221,8 +221,8 @@ def test_benchmarks_json_output_is_machine_readable(tmp_path, full_spec, capsys)
 def test_benchmarks_never_calls_the_model_for_a_spec_on_disk(
     tmp_path, full_spec, monkeypatch
 ):
-    from auto_eval import cli
-    from auto_eval.gaps import analyze
+    from closed_bench import cli
+    from closed_bench.gaps import analyze
 
     def boom(*a, **kw):  # pragma: no cover - must not be reached
         raise AssertionError("matching is offline")
@@ -238,7 +238,7 @@ def test_benchmarks_never_calls_the_model_for_a_spec_on_disk(
 
 
 def write_spec(tmp_path, spec):
-    from auto_eval.gaps import analyze
+    from closed_bench.gaps import analyze
 
     path = tmp_path / "spec.json"
     path.write_text(analyze(spec).model_dump_json())
@@ -253,7 +253,7 @@ def test_profile_reports_the_agent_and_exits_zero(tmp_path, agent_spec, capsys):
 
 
 def test_profile_exits_two_when_the_agent_cannot_be_run(tmp_path, agent_spec, capsys):
-    from auto_eval.cli import EXIT_INSUFFICIENT
+    from closed_bench.cli import EXIT_INSUFFICIENT
 
     agent_spec.subject.interface = None
     agent_spec.evidence = []
@@ -289,7 +289,7 @@ def test_author_writes_the_suite_and_the_document(tmp_path, agent_spec, capsys):
 def test_author_exits_two_without_writing_when_it_cannot_be_run(
     tmp_path, agent_spec, capsys
 ):
-    from auto_eval.cli import EXIT_INSUFFICIENT
+    from closed_bench.cli import EXIT_INSUFFICIENT
 
     agent_spec.subject.interface = None
     agent_spec.evidence = []
@@ -326,7 +326,7 @@ def test_author_never_calls_the_model_for_a_spec_on_disk(
     tmp_path, agent_spec, monkeypatch
 ):
     """The whole block is deterministic; a model call here would be a bug."""
-    from auto_eval import cli
+    from closed_bench import cli
 
     monkeypatch.setattr(
         cli, "classify", lambda *a, **kw: pytest.fail("classify should not be called")
@@ -376,7 +376,7 @@ def test_suite_prints_one_case_in_full_from_an_id_prefix(tmp_path, agent_spec, c
 
 
 def test_suite_says_so_when_the_id_matches_nothing(tmp_path, agent_spec, capsys):
-    from auto_eval.cli import EXIT_ERROR
+    from closed_bench.cli import EXIT_ERROR
 
     out_dir = tmp_path / "suite"
     main(["author", "-s", write_spec(tmp_path, agent_spec), "-o", str(out_dir)])
@@ -387,10 +387,10 @@ def test_suite_says_so_when_the_id_matches_nothing(tmp_path, agent_spec, capsys)
 
 
 def test_suite_on_an_empty_directory_exits_two_with_advice(tmp_path, capsys):
-    from auto_eval.cli import EXIT_INSUFFICIENT
+    from closed_bench.cli import EXIT_INSUFFICIENT
 
     assert main(["suite", str(tmp_path)]) == EXIT_INSUFFICIENT
-    assert "auto-eval author" in capsys.readouterr().err
+    assert "closed-bench author" in capsys.readouterr().err
 
 
 # --- running a suite ------------------------------------------------------
@@ -398,7 +398,7 @@ def test_suite_on_an_empty_directory_exits_two_with_advice(tmp_path, capsys):
 
 @pytest.fixture
 def suite_dir(tmp_path, agent_spec):
-    from auto_eval.suite import build, write
+    from closed_bench.suite import build, write
 
     suite = build(agent_spec)
     write(suite, tmp_path / "suite")
@@ -408,7 +408,7 @@ def suite_dir(tmp_path, agent_spec):
 def test_run_parser_defaults():
     args = build_parser().parse_args(["run", "suites/x"])
     assert args.suite == "suites/x"
-    assert args.model is None  # so AUTO_EVAL_SUBJECT_MODEL can supply it
+    assert args.model is None  # so CLOSED_BENCH_SUBJECT_MODEL can supply it
     assert args.split == "all"
     assert args.mock is False
 
@@ -442,8 +442,8 @@ def test_a_mock_run_needs_no_key_and_writes_a_report(suite_dir, tmp_path, capsys
 def test_a_real_run_without_a_key_stops_before_spending_anything(
     suite_dir, monkeypatch, capsys
 ):
-    from auto_eval import cli
-    from auto_eval.config import Settings
+    from closed_bench import cli
+    from closed_bench.config import Settings
 
     monkeypatch.setattr(
         cli,
@@ -531,9 +531,9 @@ def test_a_cohort_that_is_not_one_is_a_readable_error(tmp_path, capsys):
 
 def test_boards_lists_what_was_written(tmp_path, capsys):
     """Built here rather than run: this is about the listing, not the running."""
-    from auto_eval.board import Board, Row, write_board
-    from auto_eval.cohort import SystemKind
-    from auto_eval.score import Verdict
+    from closed_bench.board import Board, Row, write_board
+    from closed_bench.cohort import SystemKind
+    from closed_bench.score import Verdict
 
     board = Board(
         board_id="vendors-20260101-000000",
@@ -580,8 +580,8 @@ def test_the_example_cohort_and_dataset_that_ship_with_the_repo_are_readable():
     """The two files the docs point at have to load, or the first run fails."""
     from pathlib import Path
 
-    from auto_eval.cohort import load as load_cohort
-    from auto_eval.dataset import load as load_dataset
+    from closed_bench.cohort import load as load_cohort
+    from closed_bench.dataset import load as load_dataset
 
     # Resolved from this file, not from the working directory: the examples are
     # part of the repository, not of wherever pytest happened to be started.

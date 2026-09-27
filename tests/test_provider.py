@@ -2,8 +2,8 @@ import json
 
 import pytest
 
-from auto_eval.agent import AgentProfile, Budget, Effect, RunMode, ToolFacet
-from auto_eval.authoring import (
+from closed_bench.agent import AgentProfile, Budget, Effect, RunMode, ToolFacet
+from closed_bench.authoring import (
     Case,
     CaseSource,
     Fixture,
@@ -11,7 +11,7 @@ from auto_eval.authoring import (
     StubBehaviour,
     ToolStub,
 )
-from auto_eval.provider import (
+from closed_bench.provider import (
     MockClient,
     answer_for,
     declared_tools,
@@ -19,8 +19,8 @@ from auto_eval.provider import (
     system_prompt,
     tool_name,
 )
-from auto_eval.schema import EvalType
-from auto_eval.trace import StopReason
+from closed_bench.schema import EvalType
+from closed_bench.trace import StopReason
 
 
 @pytest.fixture

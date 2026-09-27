@@ -1,9 +1,9 @@
 import pytest
 
-from auto_eval.agent import RunMode
-from auto_eval.authoring import CaseSource
-from auto_eval.schema import EvalType, SubjectKind
-from auto_eval.suite import (
+from closed_bench.agent import RunMode
+from closed_bench.authoring import CaseSource
+from closed_bench.schema import EvalType, SubjectKind
+from closed_bench.suite import (
     Split,
     SuiteError,
     build,
@@ -154,7 +154,7 @@ def test_it_loads_from_the_file_as_well_as_the_directory(agent_spec, tmp_path):
 
 
 def test_a_missing_suite_says_how_to_make_one(tmp_path):
-    with pytest.raises(SuiteError, match="auto-eval author"):
+    with pytest.raises(SuiteError, match="closed-bench author"):
         load(tmp_path)
 
 

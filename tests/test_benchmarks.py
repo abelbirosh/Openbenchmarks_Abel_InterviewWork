@@ -1,15 +1,15 @@
 import pytest
 
-from auto_eval.benchmarks import (
+from closed_bench.benchmarks import (
     CATALOGUE,
     GENERIC_METRIC_WORDS,
     as_sources,
     by_name,
     match,
 )
-from auto_eval.gaps import analyze
-from auto_eval.ground_truth import USABLE_FITS, Fit, SourceKind
-from auto_eval.schema import (
+from closed_bench.gaps import analyze
+from closed_bench.ground_truth import USABLE_FITS, Fit, SourceKind
+from closed_bench.schema import (
     KPI,
     Direction,
     EvalType,
@@ -76,7 +76,7 @@ def test_no_entry_keys_off_a_generic_metric_word():
 
 
 def test_no_entry_carries_a_baseline_number():
-    """Scores go stale; `auto_eval.analysis` quotes them from the live page."""
+    """Scores go stale; `closed_bench.analysis` quotes them from the live page."""
     assert all(not entry.model_dump().get("baselines") for entry in CATALOGUE)
 
 

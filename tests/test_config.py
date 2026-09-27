@@ -1,11 +1,11 @@
-import auto_eval.config as config
-from auto_eval.config import DEFAULT_MODEL, get_settings, load_env
+import closed_bench.config as config
+from closed_bench.config import DEFAULT_MODEL, get_settings, load_env
 
 
 def test_defaults_when_nothing_is_set(monkeypatch):
     monkeypatch.setattr(config, "_ENV_LOADED", True)  # don't read a real .env
-    monkeypatch.delenv("AUTO_EVAL_MODEL", raising=False)
-    monkeypatch.delenv("AUTO_EVAL_BASE_URL", raising=False)
+    monkeypatch.delenv("CLOSED_BENCH_MODEL", raising=False)
+    monkeypatch.delenv("CLOSED_BENCH_BASE_URL", raising=False)
     monkeypatch.delenv("OPENAI_API_KEY", raising=False)
 
     settings = get_settings()
@@ -16,7 +16,7 @@ def test_defaults_when_nothing_is_set(monkeypatch):
 
 def test_explicit_model_beats_the_environment(monkeypatch):
     monkeypatch.setattr(config, "_ENV_LOADED", True)
-    monkeypatch.setenv("AUTO_EVAL_MODEL", "from-env")
+    monkeypatch.setenv("CLOSED_BENCH_MODEL", "from-env")
     assert get_settings(model="explicit").model == "explicit"
     assert get_settings().model == "from-env"
 
@@ -29,11 +29,11 @@ def test_blank_key_does_not_count_as_a_key(monkeypatch):
 
 def test_dotenv_is_read_but_a_real_env_var_wins(tmp_path, monkeypatch):
     (tmp_path / ".env").write_text(
-        "OPENAI_API_KEY=from-file\nAUTO_EVAL_MODEL=model-from-file\n"
+        "OPENAI_API_KEY=from-file\nCLOSED_BENCH_MODEL=model-from-file\n"
     )
     monkeypatch.setattr(config, "_ENV_LOADED", False)
     monkeypatch.setenv("OPENAI_API_KEY", "from-shell")
-    monkeypatch.delenv("AUTO_EVAL_MODEL", raising=False)
+    monkeypatch.delenv("CLOSED_BENCH_MODEL", raising=False)
 
     found = load_env(tmp_path)
 
@@ -44,11 +44,11 @@ def test_dotenv_is_read_but_a_real_env_var_wins(tmp_path, monkeypatch):
 
 
 def test_dotenv_is_found_by_walking_up(tmp_path, monkeypatch):
-    (tmp_path / ".env").write_text("AUTO_EVAL_MODEL=walked-up\n")
+    (tmp_path / ".env").write_text("CLOSED_BENCH_MODEL=walked-up\n")
     nested = tmp_path / "a" / "b"
     nested.mkdir(parents=True)
     monkeypatch.setattr(config, "_ENV_LOADED", False)
-    monkeypatch.delenv("AUTO_EVAL_MODEL", raising=False)
+    monkeypatch.delenv("CLOSED_BENCH_MODEL", raising=False)
 
     assert load_env(nested) == tmp_path / ".env"
     assert get_settings().model == "walked-up"
@@ -59,7 +59,7 @@ def test_two_threads_starting_at_once_both_see_the_key(tmp_path, monkeypatch):
     second sailed past it and concluded there was no key."""
     import threading
 
-    from auto_eval import config
+    from closed_bench import config
 
     (tmp_path / ".env").write_text("OPENAI_API_KEY=sk-from-file\n", encoding="utf-8")
     monkeypatch.setattr(config, "_ENV_LOADED", False)

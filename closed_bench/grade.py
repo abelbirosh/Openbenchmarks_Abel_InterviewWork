@@ -7,8 +7,8 @@ three places:
   read off. Every trajectory check is in this class: which tools were called,
   whether the run stopped on its own, whether it stayed inside its ceilings.
 * **judged** - a rubric, which needs a model. The judge is handed the transcript
-  and must quote from it; `auto_eval.verify.accept` voids a pass that arrives
-  without a quote, and `auto_eval.judge` additionally voids a quote that is not
+  and must quote from it; `closed_bench.verify.accept` voids a pass that arrives
+  without a quote, and `closed_bench.judge` additionally voids a quote that is not
   in the transcript.
 * **blocked** - a check this harness cannot run at all, with the reason it
   cannot. End-state and execution checks are here, because the suite's fixtures

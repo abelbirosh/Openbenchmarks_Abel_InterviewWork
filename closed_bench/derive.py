@@ -7,7 +7,7 @@ the pipeline keeps moving and the user is left only with the questions that
 genuinely need them.
 
 Nothing here invents a fact about the user's system. Every value written is
-marked `inferred` and recorded in `assumptions`, and `auto_eval.gaps` still asks
+marked `inferred` and recorded in `assumptions`, and `closed_bench.gaps` still asks
 about it as a normal question, so a derived spec is a starting point the user
 can correct rather than a claim about what they said.
 """

@@ -1,5 +1,5 @@
-from auto_eval.endpoint import Hit
-from auto_eval.score import (
+from closed_bench.endpoint import Hit
+from closed_bench.score import (
     contains,
     matches,
     normalise,

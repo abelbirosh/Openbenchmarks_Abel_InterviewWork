@@ -2,7 +2,7 @@ import types
 
 import pytest
 
-from auto_eval.analysis import (
+from closed_bench.analysis import (
     AnalysisReport,
     DatasetAssessment,
     Effort,
@@ -15,7 +15,7 @@ from auto_eval.analysis import (
     plan_for_dataset,
     verify_baselines,
 )
-from auto_eval.fetch import (
+from closed_bench.fetch import (
     DatasetMeta,
     Fetched,
     Split,
@@ -23,7 +23,7 @@ from auto_eval.fetch import (
     hf_dataset_id,
     html_to_text,
 )
-from auto_eval.ground_truth import (
+from closed_bench.ground_truth import (
     Access,
     Availability,
     ExternalSource,

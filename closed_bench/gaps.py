@@ -7,7 +7,7 @@ is computed here too - the model's own guess is discarded, and so is its view of
 what blocks: a question the model raised always comes back non-blocking, because
 it will happily call a nice-to-have a showstopper.
 
-Blocking is kept to what is genuinely unrecoverable. `auto_eval.derive` runs
+Blocking is kept to what is genuinely unrecoverable. `closed_bench.derive` runs
 first and fills in everything the spec implies - a KPI, a grading method, a
 primary metric - so in practice the only way to block is to leave us with no
 idea what is under test. Everything else - a missing entry point, absent ground

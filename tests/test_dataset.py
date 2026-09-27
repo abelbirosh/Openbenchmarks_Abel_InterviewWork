@@ -1,6 +1,6 @@
 import pytest
 
-from auto_eval.dataset import DatasetError, from_rows, load, parse
+from closed_bench.dataset import DatasetError, from_rows, load, parse
 
 JSONL = """
 {"id": "a", "query": "who?", "answers": ["Bolt"], "published": "2026-06-04"}

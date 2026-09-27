@@ -14,7 +14,7 @@ holds none of them:
 2. the **tools** - what it can reach, and which of those reach outside the test,
 3. the **budget** - what stops a run that would otherwise never terminate.
 
-`profile()` derives all three from the spec the way `auto_eval.derive` derives a
+`profile()` derives all three from the spec the way `closed_bench.derive` derives a
 KPI: from rules, marked as assumptions, never invented as fact. `agent_gate()`
 then decides whether authoring may proceed, and blocks on the two holes that are
 genuinely unrecoverable - nothing to run, or something destructive with nowhere
@@ -433,7 +433,7 @@ def _budget(spec: TaskSpec) -> Tuple[Budget, List[str]]:
 def profile(spec: TaskSpec) -> AgentProfile:
     """Read the operational facts about the agent off the spec.
 
-    Deterministic and offline, like `auto_eval.derive`: same spec, same profile.
+    Deterministic and offline, like `closed_bench.derive`: same spec, same profile.
     Everything not stated outright is recorded in `assumptions`, so a profile is
     a draft the user corrects rather than a claim about their system.
     """
@@ -494,7 +494,7 @@ def agent_gate(spec: TaskSpec, agent_profile: Optional[AgentProfile] = None) -> 
     """Whether a suite may be authored for this agent.
 
     Blocking is kept to what no amount of rule-writing can recover, the same
-    standard `auto_eval.gaps` holds: we cannot start a run and have none
+    standard `closed_bench.gaps` holds: we cannot start a run and have none
     recorded, or the agent can destroy something and we have nowhere safe to let
     it try. Everything else - an unknown tool list, no stated budget - is a
     guess the profile records and the user corrects.
@@ -513,7 +513,7 @@ def agent_gate(spec: TaskSpec, agent_profile: Optional[AgentProfile] = None) -> 
                 f"The subject is a {spec.subject.kind.value}, not an agent or a workflow, so it has "
                 "no trajectory to score. What fits this is a comparison board: the same items put to "
                 "every system, one row each, with a model-only row to show the answers could not "
-                "simply be recalled. Run `auto-eval board ITEMS --cohort COHORT`, or use the board "
+                "simply be recalled. Run `closed-bench board ITEMS --cohort COHORT`, or use the board "
                 "form on the page."
             ),
         )

@@ -5,11 +5,11 @@ against the provider API, scores each run against the case's own checks, and
 writes a report the dashboard reads.
 
 ```bash
-auto-eval run suites/support-agent            # run it, write runs/<run-id>/
-auto-eval run suites/support-agent --mock     # the whole path, no API call
-auto-eval runs                                # what has been run
-auto-eval report runs/support-agent-20260912-174501
-auto-eval serve                               # then open /dashboard
+closed-bench run suites/support-agent            # run it, write runs/<run-id>/
+closed-bench run suites/support-agent --mock     # the whole path, no API call
+closed-bench runs                                # what has been run
+closed-bench report runs/support-agent-20260912-174501
+closed-bench serve                               # then open /dashboard
 ```
 
 ## What "running an agent suite" actually means here
@@ -33,8 +33,8 @@ API. The substitution is made deliberately and recorded in every trace:
 
 | | Who settles it | Examples |
 | --- | --- | --- |
-| **Settled** | [`grade.py`](../auto_eval/grade.py), off the trace | tools called and not called, termination, ceilings, recovery after a scripted failure, a planted instruction ignored, a reply that parses |
-| **Judged** | [`judge.py`](../auto_eval/judge.py), a model | the rubrics, one criterion at a time |
+| **Settled** | [`grade.py`](../closed_bench/grade.py), off the trace | tools called and not called, termination, ceilings, recovery after a scripted failure, a planted instruction ignored, a reply that parses |
+| **Judged** | [`judge.py`](../closed_bench/judge.py), a model | the rubrics, one criterion at a time |
 | **Blocked** | nobody — reported by name | end state, execution, containment, anything queued for a person |
 
 A blocked check is one this harness cannot run, with the reason attached:
@@ -66,7 +66,7 @@ they are the same: MT-Bench documents self-preference bias in exactly that setup
 
 ## Contamination
 
-[`contamination.py`](../auto_eval/contamination.py) asks what a score is worth
+[`contamination.py`](../closed_bench/contamination.py) asks what a score is worth
 given what the model may already have seen. It holds published training cutoffs
 (with the page each was read from), a catalogue of ground truth that resists
 contamination, and a per-suite verdict: harvested and generated cases are clean
@@ -74,7 +74,7 @@ by construction, a case adapted from a public suite is only as clean as that
 suite's publication date.
 
 ```bash
-auto-eval fresh --model gpt-5     # the catalogue, judged against that cutoff
+closed-bench fresh --model gpt-5     # the catalogue, judged against that cutoff
 ```
 
 ## What a run leaves behind
@@ -116,7 +116,7 @@ The result renders in tables under the ground-truth section and links through to
 
 ## The dashboard
 
-`auto-eval serve`, then `/dashboard`. It lists the runs on disk, shows one in
+`closed-bench serve`, then `/dashboard`. It lists the runs on disk, shows one in
 full — the held-out number, what settled, what could not be checked, the
 contamination verdict, then every case — and opens each case down to the
 individual verdicts and the trace they were read off. It can also start a run:

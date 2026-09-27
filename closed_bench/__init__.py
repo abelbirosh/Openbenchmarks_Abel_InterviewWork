@@ -1,4 +1,4 @@
-"""Auto_Eval - turn a free-form request into a structured evaluation task spec."""
+"""Closed_bench - turn a free-form request into a structured evaluation task spec."""
 
 from .agent import AgentProfile, Budget, RunMode, agent_gate, profile
 from .analysis import AnalysisReport, analyze_sources

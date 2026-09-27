@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Auto_Eval &middot; runs</title>
+<title>Closed_bench &middot; runs</title>
 <style>
-  /* Auto-Eval runs — calibration certificate, engraved on a dark instrument
+  /* Closed_bench runs — calibration certificate, engraved on a dark instrument
      plate. A run is a measurement: this model, against this suite, on this
      date, to this uncertainty. Nothing here is rounded, tinted glass, or
      gradient — the world is solid blocks, hard rules, and knocked-out type.
@@ -434,7 +434,7 @@ async function loadSuites() {
   $("suite").innerHTML = options;
   $("start").disabled = !suites.length;
   if (!suites.length) {
-    $("progress").textContent = "Write one first: auto-eval author -s task.json -o suites/my-agent";
+    $("progress").textContent = "Write one first: closed-bench author -s task.json -o suites/my-agent";
   }
 }
 
@@ -451,7 +451,7 @@ async function loadRuns(select) {
     return;
   }
   if (!runs.length) {
-    $("runs").innerHTML = `<p class="none">No runs yet. Start one above, or from the command line: auto-eval run suites/my-agent</p>`;
+    $("runs").innerHTML = `<p class="none">No runs yet. Start one above, or from the command line: closed-bench run suites/my-agent</p>`;
     return;
   }
   $("runs").innerHTML = `<table>
@@ -488,7 +488,7 @@ async function loadBoards(select) {
   }
   if (!boards.length) {
     $("boards").innerHTML = `<p class="none">No boards yet. Run one from the classifier page,
-      or: auto-eval board items.jsonl -c cohort.json</p>`;
+      or: closed-bench board items.jsonl -c cohort.json</p>`;
     return;
   }
   $("boards").innerHTML = `<table>
