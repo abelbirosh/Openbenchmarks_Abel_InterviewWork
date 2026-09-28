@@ -1,5 +1,7 @@
 # Closed_bench
 
+![Closed_bench overview](assets/closed_bench.svg)
+
 Closed_bench turns a plain-language testing goal into a repeatable evaluation. It
 extracts requirements, finds benchmarks and ground truth, builds test cases,
 runs systems under the same conditions, and reports scores with supporting
