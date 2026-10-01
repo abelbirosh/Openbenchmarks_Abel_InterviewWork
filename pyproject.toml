@@ -1,7 +1,7 @@
 [build-system]
 # 77 is where setuptools learned the PEP 639 `license`/`license-files` fields
 # used below; older versions reject the SPDX string outright.
-requires = ["setuptools>=77"]
+requires = ["setuptools>=84.0.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
